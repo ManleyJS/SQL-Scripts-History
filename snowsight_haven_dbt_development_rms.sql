@@ -1,0 +1,571 @@
+-- original - September 2025
+
+use ROLE sysadmin;
+
+SHOW databases LIKE '%_dev';
+
+CREATE DATABASE haven_store_rms_dev;
+CREATE DATABASE haven_staging_rms_dev;
+CREATE DATABASE haven_pipeline_rms_dev;
+CREATE DATABASE haven_master_rms_dev;
+
+
+
+
+CREATE warehouse haven_dbt_transform_revenue_management_dev_warehouse_xsmall
+WITH WAREHOUSE_SIZE = XSMALL WAREHOUSE_TYPE = STANDARD 
+AUTO_SUSPEND = 60 AUTO_RESUME = TRUE MIN_CLUSTER_COUNT = 1 MAX_CLUSTER_COUNT = 1 SCALING_POLICY = 'STANDARD';
+
+
+CREATE warehouse haven_dbt_transform_revenue_management_dev_warehouse_medium
+WITH WAREHOUSE_SIZE = medium WAREHOUSE_TYPE = STANDARD 
+AUTO_SUSPEND = 60 AUTO_RESUME = TRUE MIN_CLUSTER_COUNT = 1 MAX_CLUSTER_COUNT = 1 SCALING_POLICY = 'STANDARD';
+
+CREATE warehouse haven_dbt_development_align_alytics_warehouse_xsmall
+WITH WAREHOUSE_SIZE = XSMALL WAREHOUSE_TYPE = STANDARD 
+AUTO_SUSPEND = 60 AUTO_RESUME = TRUE MIN_CLUSTER_COUNT = 1 MAX_CLUSTER_COUNT = 1 SCALING_POLICY = 'STANDARD';
+
+
+CREATE warehouse haven_dbt_development_align_alytics_warehouse_medium
+WITH WAREHOUSE_SIZE = medium WAREHOUSE_TYPE = STANDARD 
+AUTO_SUSPEND = 60 AUTO_RESUME = TRUE MIN_CLUSTER_COUNT = 1 MAX_CLUSTER_COUNT = 1 SCALING_POLICY = 'STANDARD';
+
+
+
+-- 17/09/2025
+
+use role sysadmin;
+
+CREATE warehouse haven_dbt_transform_revenue_management_dev_warehouse_large
+WITH WAREHOUSE_SIZE = large WAREHOUSE_TYPE = STANDARD 
+AUTO_SUSPEND = 60 AUTO_RESUME = TRUE MIN_CLUSTER_COUNT = 1 MAX_CLUSTER_COUNT = 1 SCALING_POLICY = 'STANDARD';
+
+use ROLE useradmin;
+
+CREATE role haven_dbt_transform_revenue_management_dev;
+CREATE ROLE haven_dbt_development_align_alytics;
+
+CREATE ROLE _haven_store_rms_dev__usage;
+CREATE ROLE _haven_staging_rms_dev__usage;
+CREATE ROLE _haven_pipeline_rms_dev__usage;
+
+CREATE ROLE _haven_store_rms_dev__schema;
+CREATE ROLE _haven_staging_rms_dev__schema;
+CREATE ROLE _haven_pipeline_rms_dev__schema;
+
+create role _haven_dbt_transform_revenue_management_dev_warehouse_xsmall__operator;
+create role _haven_dbt_transform_revenue_management_dev_warehouse_xsmall__usage;
+
+create role _haven_dbt_transform_revenue_management_dev_warehouse_medium__operator;
+create role _haven_dbt_transform_revenue_management_dev_warehouse_medium__usage;
+
+create role _haven_dbt_development_align_alytics_warehouse_xsmall__operator;
+create role _haven_dbt_development_align_alytics_warehouse_xsmall__usage;
+
+create role _haven_dbt_development_align_alytics_warehouse_medium__operator;
+create role _haven_dbt_development_align_alytics_warehouse_medium__usage;
+
+-- 17/09/2025
+
+use ROLE useradmin;
+create role _haven_dbt_transform_revenue_management_dev_warehouse_large__operator;
+create role _haven_dbt_transform_revenue_management_dev_warehouse_large__usage;
+
+use ROLE securityadmin;
+
+-- warehouse permissions
+
+grant usage, monitor on warehouse haven_dbt_transform_revenue_management_dev_warehouse_xsmall to role _haven_dbt_transform_revenue_management_dev_warehouse_xsmall__usage;
+grant role _haven_dbt_transform_revenue_management_dev_warehouse_xsmall__usage to role _haven_dbt_transform_revenue_management_dev_warehouse_xsmall__operator;
+grant operate, modify on warehouse haven_dbt_transform_revenue_management_dev_warehouse_xsmall to role _haven_dbt_transform_revenue_management_dev_warehouse_xsmall__operator;
+
+grant usage, monitor on warehouse haven_dbt_transform_revenue_management_dev_warehouse_medium to role _haven_dbt_transform_revenue_management_dev_warehouse_medium__usage;
+grant role _haven_dbt_transform_revenue_management_dev_warehouse_medium__usage to role _haven_dbt_transform_revenue_management_dev_warehouse_medium__operator;
+grant operate, modify on warehouse haven_dbt_transform_revenue_management_dev_warehouse_medium to role _haven_dbt_transform_revenue_management_dev_warehouse_medium__operator;
+
+grant usage, monitor on warehouse haven_dbt_development_align_alytics_warehouse_xsmall to role _haven_dbt_development_align_alytics_warehouse_xsmall__usage;
+grant role _haven_dbt_development_align_alytics_warehouse_xsmall__usage to role _haven_dbt_development_align_alytics_warehouse_xsmall__operator;
+grant operate, modify on warehouse haven_dbt_development_align_alytics_warehouse_xsmall to role _haven_dbt_development_align_alytics_warehouse_xsmall__operator;
+
+grant usage, monitor on warehouse haven_dbt_development_align_alytics_warehouse_medium to role _haven_dbt_development_align_alytics_warehouse_medium__usage;
+grant role _haven_dbt_development_align_alytics_warehouse_medium__usage to role _haven_dbt_development_align_alytics_warehouse_medium__operator;
+grant operate, modify on warehouse haven_dbt_development_align_alytics_warehouse_medium to role _haven_dbt_development_align_alytics_warehouse_medium__operator;
+
+-- 17/09/2025
+
+use ROLE securityadmin;
+
+grant usage, monitor on warehouse haven_dbt_transform_revenue_management_dev_warehouse_large to role _haven_dbt_transform_revenue_management_dev_warehouse_large__usage;
+grant role _haven_dbt_transform_revenue_management_dev_warehouse_large__usage to role _haven_dbt_transform_revenue_management_dev_warehouse_large__operator;
+grant operate, modify on warehouse haven_dbt_transform_revenue_management_dev_warehouse_large to role _haven_dbt_transform_revenue_management_dev_warehouse_large__operator;
+
+GRANT ROLE _haven_dbt_transform_revenue_management_dev_warehouse_large__usage to role haven_dbt_transform_revenue_management_dev;
+
+
+-- get the AA development database role
+SHOW roles LIKE '_align_alytics%';
+
+GRANT ROLE _ALIGN_ALYTICS__USAGE TO ROLE haven_dbt_transform_revenue_management_dev;
+GRANT ROLE _ALIGN_ALYTICS__USAGE TO ROLE haven_dbt_development_align_alytics;
+
+-- WAREHOUSE GRANTS
+
+GRANT ROLE _haven_dbt_transform_revenue_management_dev_warehouse_xsmall__usage TO ROLE haven_dbt_transform_revenue_management_dev;
+GRANT ROLE _haven_dbt_transform_revenue_management_dev_warehouse_medium__usage TO ROLE haven_dbt_transform_revenue_management_dev;
+GRANT ROLE _haven_dbt_development_align_alytics_warehouse_xsmall__usage TO ROLE haven_dbt_development_align_alytics;
+GRANT ROLE _haven_dbt_development_align_alytics_warehouse_medium__usage TO ROLE haven_dbt_development_align_alytics;
+
+-- STANDARD DATABASE ROLE PERMISSIONS 
+
+GRANT USAGE ON DATABASE HAVEN_STORE_rms_dev TO ROLE _HAVEN_STORE_rms_dev__USAGE;
+GRANT USAGE ON DATABASE HAVEN_STAGING_rms_dev TO ROLE _HAVEN_STAGING_rms_dev__USAGE;
+GRANT USAGE ON DATABASE HAVEN_PIPELINE_rms_dev TO ROLE _HAVEN_PIPELINE_rms_dev__USAGE;
+
+GRANT CREATE SCHEMA ON DATABASE HAVEN_STORE_rms_dev TO ROLE _HAVEN_STORE_rms_dev__SCHEMA;
+GRANT CREATE SCHEMA ON DATABASE HAVEN_STAGING_rms_dev TO ROLE _HAVEN_STAGING_rms_dev__SCHEMA;
+GRANT CREATE SCHEMA ON DATABASE HAVEN_PIPELINE_rms_dev TO ROLE _HAVEN_PIPELINE_rms_dev__SCHEMA;
+
+GRANT ROLE _HAVEN_STORE_rms_dev__USAGE TO ROLE _HAVEN_STORE_rms_dev__SCHEMA;
+GRANT ROLE _HAVEN_STAGING_rms_dev__USAGE TO ROLE _HAVEN_STAGING_rms_dev__SCHEMA;
+GRANT ROLE _HAVEN_PIPELINE_rms_dev__USAGE TO ROLE _HAVEN_PIPELINE_rms_dev__SCHEMA;
+
+GRANT ROLE _HAVEN_STORE_rms_dev__SCHEMA TO ROLE haven_dbt_transform_revenue_management_dev;
+GRANT ROLE _HAVEN_STAGING_rms_dev__SCHEMA TO ROLE haven_dbt_transform_revenue_management_dev;
+GRANT ROLE _HAVEN_PIPELINE_rms_dev__SCHEMA TO ROLE haven_dbt_transform_revenue_management_dev;
+
+GRANT ROLE _HAVEN_STORE_rms_dev__SCHEMA TO ROLE haven_dbt_development_align_alytics;
+GRANT ROLE _HAVEN_STAGING_rms_dev__SCHEMA TO ROLE haven_dbt_development_align_alytics;
+GRANT ROLE _HAVEN_PIPELINE_rms_dev__SCHEMA TO ROLE haven_dbt_development_align_alytics;
+
+GRANT ROLE _haven_store_rms_dev__haven_staging__creator TO ROLE haven_dbt_transform_revenue_management_dev;
+GRANT ROLE _haven_store_rms_dev__output_history__creator TO ROLE haven_dbt_transform_revenue_management_dev;
+GRANT ROLE _haven_store_rms_dev__pricer__creator TO ROLE haven_dbt_transform_revenue_management_dev;
+GRANT ROLE _haven_store_rms_dev__pricer_forecast__creator TO ROLE haven_dbt_transform_revenue_management_dev;
+GRANT ROLE _haven_store_rms_dev__storage__creator TO ROLE haven_dbt_transform_revenue_management_dev;
+GRANT ROLE _haven_store_rms_dev__revenue_management_reporting__creator TO ROLE haven_dbt_transform_revenue_management_dev;
+
+
+GRANT ROLE _haven_staging_rms_dev__dms_staging__creator TO ROLE haven_dbt_transform_revenue_management_dev;
+GRANT ROLE _haven_staging_rms_dev__rm_staging__creator TO ROLE haven_dbt_transform_revenue_management_dev;
+GRANT ROLE _haven_staging_rms_dev__revenue_management_staging__creator TO ROLE haven_dbt_transform_revenue_management_dev;
+GRANT ROLE _haven_staging_rms_dev__revenue_management_output__creator TO ROLE haven_dbt_transform_revenue_management_dev;
+
+GRANT ROLE haven_dbt_transform_revenue_management_dev TO ROLE dba;
+GRANT ROLE haven_dbt_development_align_alytics TO ROLE dba;
+
+GRANT ROLE haven_dbt_transform_revenue_management_dev TO USER sarunasjatautis;
+GRANT ROLE haven_dbt_development_align_alytics TO USER sarunasjatautis;
+
+
+-- to be revoked after data and views replicated
+
+GRANT ROLE _haven_store_uat__haven_staging__reader TO ROLE haven_dbt_transform_revenue_management_dev;
+GRANT ROLE _haven_store_uat__output_history__reader TO ROLE haven_dbt_transform_revenue_management_dev;
+GRANT ROLE _haven_store_uat__pricer__reader TO ROLE haven_dbt_transform_revenue_management_dev;
+GRANT ROLE _haven_store_uat__pricer_forecast__reader TO ROLE haven_dbt_transform_revenue_management_dev;
+GRANT ROLE _haven_store_uat__storage__reader TO ROLE haven_dbt_transform_revenue_management_dev;
+GRANT ROLE _haven_store_uat__revenue_management_reporting__creator TO ROLE haven_dbt_transform_revenue_management_dev;
+
+
+GRANT ROLE _haven_staging_uat__dms_staging__reader TO ROLE haven_dbt_transform_revenue_management_dev;
+GRANT ROLE _haven_staging_uat__rm_staging__reader TO ROLE haven_dbt_transform_revenue_management_dev;
+GRANT ROLE _haven_staging_uat__revenue_management_staging__creator TO ROLE haven_dbt_transform_revenue_management_dev;
+GRANT ROLE _haven_staging_uat__revenue_management_output__creator TO ROLE haven_dbt_transform_revenue_management_dev;
+
+
+REVOKE ROLE _haven_store_uat__haven_staging__reader from ROLE haven_dbt_transform_revenue_management_dev;
+REVOKE ROLE _haven_store_uat__output_history__reader from ROLE haven_dbt_transform_revenue_management_dev;
+REVOKE ROLE _haven_store_uat__pricer__reader from ROLE haven_dbt_transform_revenue_management_dev;
+REVOKE ROLE _haven_store_uat__pricer_forecast__reader from ROLE haven_dbt_transform_revenue_management_dev;
+REVOKE ROLE _haven_store_uat__storage__reader from ROLE haven_dbt_transform_revenue_management_dev;
+REVOKE ROLE _haven_store_uat__revenue_management_reporting__creator from ROLE haven_dbt_transform_revenue_management_dev;
+
+REVOKE ROLE _haven_staging_uat__dms_staging__reader from ROLE haven_dbt_transform_revenue_management_dev;
+REVOKE ROLE _haven_staging_uat__rm_staging__reader from ROLE haven_dbt_transform_revenue_management_dev;
+REVOKE ROLE _haven_staging_uat__revenue_management_staging__creator from ROLE haven_dbt_transform_revenue_management_dev;
+REVOKE ROLE _haven_staging_uat__revenue_management_output__creator from ROLE haven_dbt_transform_revenue_management_dev;
+
+-- haven_dbt_development_align_alytics default roles
+
+GRANT ROLE _HAVEN_BASE__AMPLITUDE__READER TO ROLE haven_dbt_development_align_alytics;
+GRANT ROLE _HAVEN_BASE__BLUEYONDER__READER TO ROLE haven_dbt_development_align_alytics;
+
+GRANT ROLE _HAVEN_STAGING__DECISION_MATRIX_STAGING__READER TO ROLE haven_dbt_development_align_alytics;
+GRANT ROLE _HAVEN_STAGING__DMS_STAGING__READER TO ROLE haven_dbt_development_align_alytics;
+GRANT ROLE _HAVEN_STAGING__REVENUE_MANAGEMENT_OUTPUT__READER TO ROLE haven_dbt_development_align_alytics;
+GRANT ROLE _HAVEN_STAGING__REVENUE_MANAGEMENT_STAGING__READER TO ROLE haven_dbt_development_align_alytics;
+
+GRANT ROLE _HAVEN_STAGING_rms_dev__DMS_STAGING__READER TO ROLE haven_dbt_development_align_alytics;
+GRANT ROLE _HAVEN_STAGING_rms_dev__REVENUE_MANAGEMENT_OUTPUT__READER TO ROLE haven_dbt_development_align_alytics;
+GRANT ROLE _HAVEN_STAGING_rms_dev__REVENUE_MANAGEMENT_STAGING__READER TO ROLE haven_dbt_development_align_alytics;
+GRANT ROLE _HAVEN_STAGING_rms_dev__RM_STAGING__READER TO ROLE haven_dbt_development_align_alytics;
+
+GRANT ROLE _HAVEN_STORE__COMPETITOR__READER TO ROLE haven_dbt_development_align_alytics;
+GRANT ROLE _HAVEN_STORE__PRICER_DECISION_MATRIX__READER TO ROLE haven_dbt_development_align_alytics;
+GRANT ROLE _HAVEN_STORE__PRICER__READER TO ROLE haven_dbt_development_align_alytics;
+GRANT ROLE _HAVEN_STORE__REVENUE_MANAGEMENT_REPORTING__READER TO ROLE haven_dbt_development_align_alytics;
+
+GRANT ROLE _HAVEN_STORE_rms_dev__REVENUE_MANAGEMENT_REPORTING__READER TO ROLE haven_dbt_development_align_alytics;
+
+GRANT ROLE _HAVEN_MASTER__REVENUE_MANAGEMENT_STORAGE__READER TO ROLE haven_dbt_development_align_alytics;
+
+
+-- these roles need to be set up for the two new roles
+
+_HAVEN_REVENUE_MANAGEMENT_PRICER__HAVEN_STORE_UAT__AVAILABILITY__READER
+_HAVEN_REVENUE_MANAGEMENT_PRICER__HAVEN_STORE_UAT__COMMERCIAL__READER
+_HAVEN_REVENUE_MANAGEMENT_PRICER__HAVEN_STORE_UAT__COMMON__READER
+_HAVEN_REVENUE_MANAGEMENT_PRICER__HAVEN_STORE_UAT__OCANDC__READER
+_HAVEN_REVENUE_MANAGEMENT_PRICER__HAVEN_STORE_UAT__TROOPER2__READER
+_HAVEN_REVENUE_MANAGEMENT_PRICER__HAVEN_STORE_UAT__TROOPER__READER
+_HAVEN_REVENUE_MANAGEMENT__HAVEN_STORE__PERFORMANCE_MARKETING__READER
+_HAVEN_REVENUE_MANAGEMENT_PRICER__HAVEN_BASE__PRICER__READER
+_HAVEN_REVENUE_MANAGEMENT_PRICER__HAVEN_BASE__SEAWARE__READER
+_HAVEN_REVENUE_MANAGEMENT_PRICER__HAVEN_PIPELINE__PX0006_BLUEYONDER_PRICER__READER
+_HAVEN_REVENUE_MANAGEMENT_PRICER__HAVEN_STORE__AVAILABILITY__READER
+_HAVEN_REVENUE_MANAGEMENT_PRICER__HAVEN_STORE__COMMERCIAL__READER
+_HAVEN_REVENUE_MANAGEMENT_PRICER__HAVEN_STORE__COMMON__READER
+_HAVEN_REVENUE_MANAGEMENT_PRICER__HAVEN_STORE__HOLIDAY__READER
+_HAVEN_REVENUE_MANAGEMENT_PRICER__HAVEN_STORE__OCANDC__READER
+_HAVEN_REVENUE_MANAGEMENT_PRICER__HAVEN_STORE__PERFORMANCE_MARKETING__READER
+_HAVEN_REVENUE_MANAGEMENT_PRICER__HAVEN_STORE__PRICER__READER
+_HAVEN_REVENUE_MANAGEMENT_PRICER__HAVEN_STORE__TROOPER2__READER
+_HAVEN_REVENUE_MANAGEMENT_PRICER__HAVEN_STORE__TROOPER__READER
+_HAVEN_REVENUE_MANAGEMENT__HAVEN_STORE__COMMON__READER
+_HAVEN_REVENUE_MANAGEMENT__HAVEN_STORE__PERFORMANCE_MARKETING__READER
+
+
+-- haven_dbt_transform_revenue_management_dev default roles
+
+GRANT ROLE _HAVEN_BASE__AMPLITUDE__READER TO ROLE haven_dbt_transform_revenue_management_dev;
+GRANT ROLE _HAVEN_BASE__BLUEYONDER__READER TO ROLE haven_dbt_transform_revenue_management_dev;
+
+GRANT ROLE _HAVEN_STAGING__DECISION_MATRIX_STAGING__READER TO ROLE haven_dbt_transform_revenue_management_dev;
+GRANT ROLE _HAVEN_STAGING__DMS_STAGING__READER TO ROLE haven_dbt_transform_revenue_management_dev;
+GRANT ROLE _HAVEN_STAGING__REVENUE_MANAGEMENT_OUTPUT__READER TO ROLE haven_dbt_transform_revenue_management_dev;
+GRANT ROLE _HAVEN_STAGING__REVENUE_MANAGEMENT_STAGING__READER TO ROLE haven_dbt_transform_revenue_management_dev;
+
+GRANT ROLE _HAVEN_STORE__COMPETITOR__READER TO ROLE haven_dbt_transform_revenue_management_dev;
+GRANT ROLE _HAVEN_STORE__PRICER_DECISION_MATRIX__READER TO ROLE haven_dbt_transform_revenue_management_dev;
+GRANT ROLE _HAVEN_STORE__PRICER__READER TO ROLE haven_dbt_transform_revenue_management_dev;
+GRANT ROLE _HAVEN_STORE__REVENUE_MANAGEMENT_REPORTING__READER TO ROLE haven_dbt_transform_revenue_management_dev;
+
+
+SHOW GRANTS TO ROLE _haven_dbt_transform_revenue_management_dev__haven_store__common__reader;
+use ROLE securityadmin;
+GRANT SELECT ON TABLE haven_store.common.dim_park TO ROLE _haven_dbt_transform_revenue_management_dev__haven_store__common__reader;
+
+
+-- 22/09/2025
+
+use ROLE securityadmin;
+grant role haven_dbt_development_align_alytics to user sarunasjatautis;
+grant role haven_dbt_development_align_alytics to user dillonsim;
+
+-- 22/09/2025
+use ROLE securityadmin;
+GRANT ROLE _haven_store_rms_dev__common__creator TO ROLE haven_dbt_transform_revenue_management_dev; 
+
+-- 01/10/2025
+
+use ROLE useradmin;
+
+SHOW roles LIKE '%HAVEN_DBT_TRANSFORM_revenue_management_dev_WAREHOUSE_LARGE%';
+
+DROP ROLE _HAVEN_DBT_TRANSFORM_revenue_management_dev_WAREHOUSE_LARGE__OPERATOR;
+DROP ROLE _HAVEN_DBT_TRANSFORM_revenue_management_dev_WAREHOUSE_LARGE__USAGE;
+
+use ROLE sysadmin;
+
+DROP warehouse HAVEN_DBT_TRANSFORM_revenue_management_dev_WAREHOUSE_LARGE;
+
+use ROLE securityadmin;
+
+SHOW roles LIKE '%haven_dbt_transform_%';
+
+GRANT ROLE HAVEN_DBT_TRANSFORM_revenue_management_dev TO USER dillonsim;
+
+GRANT ROLE HAVEN_DBT_TRANSFORM_revenue_management_dev TO USER SHELDONDEE;
+GRANT ROLE HAVEN_DBT_TRANSFORM_revenue_management_dev TO USER RICHARDTEUCHERT;
+GRANT ROLE HAVEN_DBT_TRANSFORM_revenue_management_dev TO USER RICHARDJOLLY;
+GRANT ROLE HAVEN_DBT_TRANSFORM_revenue_management_dev TO USER MATTHEWBETTS;
+
+
+-- 03/10/2025
+
+use role sysadmin;
+
+CREATE warehouse haven_dbt_development_align_alytics_warehouse_large
+WITH WAREHOUSE_SIZE = large WAREHOUSE_TYPE = STANDARD 
+AUTO_SUSPEND = 60 AUTO_RESUME = TRUE MIN_CLUSTER_COUNT = 1 MAX_CLUSTER_COUNT = 1 SCALING_POLICY = 'STANDARD';
+
+use role useradmin;
+
+create role _haven_dbt_development_align_alytics_warehouse_large__operator;
+create role _haven_dbt_development_align_alytics_warehouse_large__usage;
+
+use role securityadmin;
+
+grant usage, monitor on warehouse haven_dbt_development_align_alytics_warehouse_large to role _haven_dbt_development_align_alytics_warehouse_large__usage;
+grant role _haven_dbt_development_align_alytics_warehouse_large__usage to role _haven_dbt_development_align_alytics_warehouse_large__operator;
+grant operate, modify on warehouse haven_dbt_development_align_alytics_warehouse_large to role _haven_dbt_development_align_alytics_warehouse_large__operator;
+
+grant role _haven_dbt_development_align_alytics_warehouse_large__usage to role haven_dbt_development_align_alytics;
+
+-- 07/10/2025
+
+use ROLE securityadmin;
+
+REVOKE ROLE HAVEN_DBT_TRANSFORM_revenue_management_dev FROM USER SHELDONDEE;
+REVOKE ROLE HAVEN_DBT_TRANSFORM_revenue_management_dev FROM USER RICHARDTEUCHERT;
+REVOKE ROLE HAVEN_DBT_TRANSFORM_revenue_management_dev FROM USER RICHARDJOLLY;
+REVOKE ROLE HAVEN_DBT_TRANSFORM_revenue_management_dev FROM USER MATTHEWBETTS;
+
+GRANT ROLE HAVEN_DBT_DEVELOPMENT_ALIGN_ALYTICS TO USER SHELDONDEE;
+GRANT ROLE HAVEN_DBT_DEVELOPMENT_ALIGN_ALYTICS TO USER RICHARDTEUCHERT;
+GRANT ROLE HAVEN_DBT_DEVELOPMENT_ALIGN_ALYTICS TO USER RICHARDJOLLY;
+GRANT ROLE HAVEN_DBT_DEVELOPMENT_ALIGN_ALYTICS TO USER MATTHEWBETTS;
+
+GRANT ROLE HAVEN_DBT_DEVELOPMENT_ALIGN_ALYTICS TO USER DILLONSIM;
+
+-- 15/10/2025
+
+use ROLE useradmin;
+
+CREATE ROLE _haven_store_rms_dev__development__usage;
+
+SHOW ROLEs LIKE '_haven_store_rms_dev__%';
+
+SHOW GRANTS TO ROLE _HAVEN_STORE_rms_dev__SCHEMA;
+
+use ROLE securityadmin;
+
+GRANT USAGE ON DATABASE haven_store_rms_dev TO ROLE _haven_store_rms_dev__development__usage;
+GRANT USAGE ON ALL SCHEMAS IN DATABASE haven_store_rms_dev  TO ROLE _haven_store_rms_dev__development__usage;
+GRANT USAGE ON FUTURE SCHEMAS IN DATABASE haven_store_rms_dev  TO ROLE _haven_store_rms_dev__development__usage;
+GRANT select ON ALL tables IN DATABASE haven_store_rms_dev  TO ROLE _haven_store_rms_dev__development__usage;
+GRANT select ON FUTURE tables IN DATABASE haven_store_rms_dev  TO ROLE _haven_store_rms_dev__development__usage;
+GRANT select ON ALL views IN DATABASE haven_store_rms_dev  TO ROLE _haven_store_rms_dev__development__usage;
+GRANT select ON FUTURE views IN DATABASE haven_store_rms_dev  TO ROLE _haven_store_rms_dev__development__usage;
+GRANT select ON ALL materialized views IN DATABASE haven_store_rms_dev  TO ROLE _haven_store_rms_dev__development__usage;
+GRANT select ON FUTURE materialized views IN DATABASE haven_store_rms_dev  TO ROLE _haven_store_rms_dev__development__usage;
+GRANT USAGE ON ALL stages IN DATABASE haven_store_rms_dev  TO ROLE _haven_store_rms_dev__development__usage;
+GRANT USAGE ON FUTURE stages IN DATABASE haven_store_rms_dev  TO ROLE _haven_store_rms_dev__development__usage;
+GRANT USAGE ON ALL file formats IN DATABASE haven_store_rms_dev  TO ROLE _haven_store_rms_dev__development__usage;
+GRANT USAGE ON FUTURE file formats IN DATABASE haven_store_rms_dev  TO ROLE _haven_store_rms_dev__development__usage;
+
+
+GRANT ROLE _haven_store_rms_dev__development__usage TO ROLE HAVEN_DBT_DEVELOPMENT_ALIGN_ALYTICS;
+
+use ROLE HAVEN_DBT_DEVELOPMENT_ALIGN_ALYTICS;
+
+use DATABASE haven_store_rms_dev;
+
+SHOW schemas;
+
+-- 17/10/2025
+-- haven_semantic future grants
+
+use ROLE useradmin;
+
+CREATE ROLE _haven_semantic_rms_dev__development__usage;
+CREATE ROLE _haven_pipeline_rms_dev__development__usage;
+CREATE ROLE _haven_staging_rms_dev__development__usage;
+
+use ROLE securityadmin;
+
+GRANT USAGE ON DATABASE haven_semantic_rms_dev TO ROLE _haven_semantic_rms_dev__development__usage;
+GRANT USAGE ON ALL SCHEMAS IN DATABASE haven_semantic_rms_dev  TO ROLE _haven_semantic_rms_dev__development__usage;
+GRANT USAGE ON FUTURE SCHEMAS IN DATABASE haven_semantic_rms_dev  TO ROLE _haven_semantic_rms_dev__development__usage;
+GRANT select ON ALL tables IN DATABASE haven_semantic_rms_dev  TO ROLE _haven_semantic_rms_dev__development__usage;
+GRANT select ON FUTURE tables IN DATABASE haven_semantic_rms_dev  TO ROLE _haven_semantic_rms_dev__development__usage;
+GRANT select ON ALL views IN DATABASE haven_semantic_rms_dev  TO ROLE _haven_semantic_rms_dev__development__usage;
+GRANT select ON FUTURE views IN DATABASE haven_semantic_rms_dev  TO ROLE _haven_semantic_rms_dev__development__usage;
+GRANT select ON ALL materialized views IN DATABASE haven_semantic_rms_dev  TO ROLE _haven_semantic_rms_dev__development__usage;
+GRANT select ON FUTURE materialized views IN DATABASE haven_semantic_rms_dev  TO ROLE _haven_semantic_rms_dev__development__usage;
+GRANT USAGE ON ALL stages IN DATABASE haven_semantic_rms_dev  TO ROLE _haven_semantic_rms_dev__development__usage;
+GRANT USAGE ON FUTURE stages IN DATABASE haven_semantic_rms_dev  TO ROLE _haven_semantic_rms_dev__development__usage;
+GRANT USAGE ON ALL file formats IN DATABASE haven_semantic_rms_dev  TO ROLE _haven_semantic_rms_dev__development__usage;
+GRANT USAGE ON FUTURE file formats IN DATABASE haven_semantic_rms_dev  TO ROLE _haven_semantic_rms_dev__development__usage;
+
+GRANT ROLE _haven_semantic_rms_dev__development__usage TO ROLE HAVEN_DBT_DEVELOPMENT_ALIGN_ALYTICS;
+
+-- haven_pipeline future grants
+
+use ROLE securityadmin;
+
+GRANT USAGE ON DATABASE haven_pipeline_rms_dev TO ROLE _haven_pipeline_rms_dev__development__usage;
+GRANT USAGE ON ALL SCHEMAS IN DATABASE haven_pipeline_rms_dev  TO ROLE _haven_pipeline_rms_dev__development__usage;
+GRANT USAGE ON FUTURE SCHEMAS IN DATABASE haven_pipeline_rms_dev  TO ROLE _haven_pipeline_rms_dev__development__usage;
+GRANT select ON ALL tables IN DATABASE haven_pipeline_rms_dev  TO ROLE _haven_pipeline_rms_dev__development__usage;
+GRANT select ON FUTURE tables IN DATABASE haven_pipeline_rms_dev  TO ROLE _haven_pipeline_rms_dev__development__usage;
+GRANT select ON ALL views IN DATABASE haven_pipeline_rms_dev  TO ROLE _haven_pipeline_rms_dev__development__usage;
+GRANT select ON FUTURE views IN DATABASE haven_pipeline_rms_dev  TO ROLE _haven_pipeline_rms_dev__development__usage;
+GRANT select ON ALL materialized views IN DATABASE haven_pipeline_rms_dev  TO ROLE _haven_pipeline_rms_dev__development__usage;
+GRANT select ON FUTURE materialized views IN DATABASE haven_pipeline_rms_dev  TO ROLE _haven_pipeline_rms_dev__development__usage;
+GRANT USAGE ON ALL stages IN DATABASE haven_pipeline_rms_dev  TO ROLE _haven_pipeline_rms_dev__development__usage;
+GRANT USAGE ON FUTURE stages IN DATABASE haven_pipeline_rms_dev  TO ROLE _haven_pipeline_rms_dev__development__usage;
+GRANT USAGE ON ALL file formats IN DATABASE haven_pipeline_rms_dev  TO ROLE _haven_pipeline_rms_dev__development__usage;
+GRANT USAGE ON FUTURE file formats IN DATABASE haven_pipeline_rms_dev  TO ROLE _haven_pipeline_rms_dev__development__usage;
+
+GRANT ROLE _haven_pipeline_rms_dev__development__usage TO ROLE HAVEN_DBT_DEVELOPMENT_ALIGN_ALYTICS;
+
+-- haven_staging future grants
+
+use ROLE securityadmin;
+
+GRANT USAGE ON DATABASE haven_staging_rms_dev TO ROLE _haven_staging_rms_dev__development__usage;
+GRANT USAGE ON ALL SCHEMAS IN DATABASE haven_staging_rms_dev  TO ROLE _haven_staging_rms_dev__development__usage;
+GRANT USAGE ON FUTURE SCHEMAS IN DATABASE haven_staging_rms_dev  TO ROLE _haven_staging_rms_dev__development__usage;
+GRANT select ON ALL tables IN DATABASE haven_staging_rms_dev  TO ROLE _haven_staging_rms_dev__development__usage;
+GRANT select ON FUTURE tables IN DATABASE haven_staging_rms_dev  TO ROLE _haven_staging_rms_dev__development__usage;
+GRANT select ON ALL views IN DATABASE haven_staging_rms_dev  TO ROLE _haven_staging_rms_dev__development__usage;
+GRANT select ON FUTURE views IN DATABASE haven_staging_rms_dev  TO ROLE _haven_staging_rms_dev__development__usage;
+GRANT select ON ALL materialized views IN DATABASE haven_staging_rms_dev  TO ROLE _haven_staging_rms_dev__development__usage;
+GRANT select ON FUTURE materialized views IN DATABASE haven_staging_rms_dev  TO ROLE _haven_staging_rms_dev__development__usage;
+GRANT USAGE ON ALL stages IN DATABASE haven_staging_rms_dev  TO ROLE _haven_staging_rms_dev__development__usage;
+GRANT USAGE ON FUTURE stages IN DATABASE haven_staging_rms_dev  TO ROLE _haven_staging_rms_dev__development__usage;
+GRANT USAGE ON ALL file formats IN DATABASE haven_staging_rms_dev  TO ROLE _haven_staging_rms_dev__development__usage;
+GRANT USAGE ON FUTURE file formats IN DATABASE haven_staging_rms_dev  TO ROLE _haven_staging_rms_dev__development__usage;
+
+
+GRANT ROLE _haven_staging_rms_dev__development__usage TO ROLE HAVEN_DBT_DEVELOPMENT_ALIGN_ALYTICS;
+
+use ROLE securityadmin;
+
+GRANT ROLE _haven_store__rms_pricer_forecast__reader TO ROLE HAVEN_DBT_DEVELOPMENT_ALIGN_ALYTICS;
+
+use ROLE securityadmin;
+
+GRANT ROLE _haven_store__rms_pricer_forecast__reader TO ROLE haven_dbt_transform_revenue_management_dev;
+
+GRANT ROLE _haven_store_rms_dev__development__usage TO ROLE haven_dbt_transform_revenue_management_dev;
+GRANT ROLE _haven_pipeline_rms_dev__development__usage TO ROLE haven_dbt_transform_revenue_management_dev;
+GRANT ROLE _haven_semantic_rms_dev__development__usage TO ROLE haven_dbt_transform_revenue_management_dev;
+GRANT ROLE _haven_staging_rms_dev__development__usage TO ROLE haven_dbt_transform_revenue_management_dev;
+
+show GRANTS TO ROLE haven_dbt_transform_revenue_management_dev;
+
+GRANT ROLE _haven_semantic_rms_dev__schema TO ROLE haven_dbt_transform_revenue_management_dev;
+
+
+use ROLE HAVEN_DBT_DEVELOPMENT_ALIGN_ALYTICS;
+SHOW warehouses;
+
+use ROLE securityadmin;
+
+SHOW GRANTS TO ROLE HAVEN_DBT_DEVELOPMENT_ALIGN_ALYTICS; 
+
+use DATABASE haven_store_rms_dev;
+
+SHOW schemas;
+
+-- 2025-10-20
+
+-- grant AA service account access on semantic database
+
+use ROLE dba;
+
+SHOW roles LIKE '%align%%';
+
+SHOW GRANTS TO USER aa_analytics_service_account;
+
+-- 21/10/2025
+
+use role securityadmin;
+
+use role haven_schema_setup;
+use warehouse haven_schema_setup_warehouse_xsmall;
+
+use DATABASE haven_staging;
+SHOW schemas;
+
+use DATABASE haven_store;
+SHOW schemas;
+
+call haven_master.procedures.schema_role_creation('haven_staging', 'revenue_management_reporting');
+call haven_master.procedures.schema_role_creation('haven_staging', 'rms_pricer_forecast');
+call haven_master.procedures.schema_role_creation('haven_staging', 'rms_pricer_common');
+call haven_master.procedures.schema_role_creation('haven_semantic', 'revenue_management_reporting');
+
+
+GRANT ROLE _HAVEN_STAGING__REVENUE_MANAGEMENT_REPORTING__READER TO ROLE haven_dbt_development_align_alytics; 
+GRANT ROLE _HAVEN_STORE__REVENUE_MANAGEMENT_REPORTING__READER TO ROLE haven_dbt_development_align_alytics;
+GRANT ROLE _HAVEN_SEMANTIC__REVENUE_MANAGEMENT_REPORTING__READER TO ROLE haven_dbt_development_align_alytics;
+
+
+GRANT ROLE _HAVEN_STAGING__RMS_PRICER_FORECAST__READER TO ROLE haven_dbt_development_align_alytics;
+GRANT ROLE _HAVEN_STORE__RMS_PRICER_FORECAST__READER TO ROLE haven_dbt_development_align_alytics;
+
+
+GRANT ROLE _HAVEN_STAGING__RMS_PRICER_COMMON__READER TO ROLE haven_dbt_development_align_alytics;
+
+GRANT ROLE _HAVEN_STORE__pricer__READER TO ROLE haven_dbt_development_align_alytics;
+GRANT ROLE _HAVEN_STORE__haven_staging__READER TO ROLE haven_dbt_development_align_alytics;
+GRANT ROLE _HAVEN_STORE__rms_pricer__READER TO ROLE haven_dbt_development_align_alytics;
+
+-- 21/10/2025
+
+use ROLE useradmin;
+
+SHOW users LIKE '%AA%';
+
+use ROLE securityadmin;
+
+GRANT ROLE haven_dbt_development_align_alytics TO USER AA_ANALYTICS_DEV_SERVICE_ACCOUNT;
+GRANT ROLE haven_dbt_development_align_alytics TO USER AA_ANALYTICS_SERVICE_ACCOUNT;
+
+
+SHOW GRANTS TO ROLE _HAVEN_SEMANTIC_rms_dev__DEVELOPMENT__USAGE;
+SHOW GRANTS TO ROLE _HAVEN_SEMANTIC_rms_dev__SCHEMA;
+
+use ROLE haven_dbt_development_align_alytics;
+
+SHOW warehouses;
+
+-- 06/11/2025
+
+use ROLE sysadmin;
+
+
+CREATE warehouse haven_dbt_transform_revenue_management_dev_warehouse_large
+WITH WAREHOUSE_SIZE = large WAREHOUSE_TYPE = STANDARD 
+AUTO_SUSPEND = 60 AUTO_RESUME = TRUE MIN_CLUSTER_COUNT = 1 MAX_CLUSTER_COUNT = 1 SCALING_POLICY = 'STANDARD';
+
+CREATE warehouse haven_dbt_transform_align_alytics_warehouse_large
+WITH WAREHOUSE_SIZE = large WAREHOUSE_TYPE = STANDARD 
+AUTO_SUSPEND = 60 AUTO_RESUME = TRUE MIN_CLUSTER_COUNT = 1 MAX_CLUSTER_COUNT = 1 SCALING_POLICY = 'STANDARD';
+
+use ROLE useradmin;
+
+create role _haven_dbt_transform_revenue_management_dev_warehouse_large__operator;
+create role _haven_dbt_transform_revenue_management_dev_warehouse_large__usage;
+create role _haven_dbt_transform_revenue_management_dev_warehouse_large__monitor_only;
+
+create role _haven_dbt_transform_align_alytics_warehouse_large__operator;
+create role _haven_dbt_transform_align_alytics_warehouse_large__usage;
+
+use ROLE securityadmin;
+
+grant usage, monitor on warehouse haven_dbt_transform_revenue_management_dev_warehouse_large to role _haven_dbt_transform_revenue_management_dev_warehouse_large__usage;
+grant role _haven_dbt_transform_revenue_management_dev_warehouse_large__usage to role _haven_dbt_transform_revenue_management_dev_warehouse_large__operator;
+grant operate, modify on warehouse haven_dbt_transform_revenue_management_dev_warehouse_large to role _haven_dbt_transform_revenue_management_dev_warehouse_large__operator;
+
+grant usage, monitor on warehouse haven_dbt_transform_align_alytics_warehouse_large to role _haven_dbt_transform_align_alytics_warehouse_large__usage;
+grant role _haven_dbt_transform_align_alytics_warehouse_large__usage to role _haven_dbt_transform_align_alytics_warehouse_large__operator;
+grant operate, modify on warehouse haven_dbt_transform_align_alytics_warehouse_large to role _haven_dbt_transform_align_alytics_warehouse_large__operator;
+
+grant monitor on warehouse haven_dbt_transform_revenue_management_dev_warehouse_large to role _haven_dbt_transform_revenue_management_dev_warehouse_large__monitor_only;
+
+GRANT ROLE _haven_dbt_transform_revenue_management_dev_warehouse_large__usage TO ROLE haven_dbt_transform_revenue_management_dev;
+REVOKE ROLE _haven_dbt_transform_revenue_management_dev_warehouse_large__monitor_only FROM ROLE haven_dbt_transform_revenue_management_dev;
+GRANT ROLE _haven_dbt_transform_revenue_management_dev_warehouse_large__monitor_only TO ROLE haven_dbt_DEVELOPMENT_align_alytics;
+GRANT ROLE _haven_dbt_transform_align_alytics_warehouse_large__usage TO ROLE haven_dbt_transform;
+
+
+
+
+
+
+haven_dbt_transform_revenue_management_dev
+haven_dbt_development_align_alytics

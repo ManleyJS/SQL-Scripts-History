@@ -1,0 +1,66 @@
+--create haven_revenue_management_systems_dev role, and grant it to my user;
+--then, `GRANT ROLE _HAVEN_MASTER__STREAMLITS__USAGE to role haven_revenue_management_systems_dev`;
+--create revenue_management_systems_file_upload schemas in haven_staging_dev and haven_staging databases for streamlit_file_upload_application_dev and streamlit_file_upload_application roles
+--drop  revenue_management_file_uploads schemas that you created the above
+
+-- 18/12/2025
+
+use role dba;
+
+show roles LIKE '%revenue_management_file_upload%';
+
+use ROLE useradmin;
+
+CREATE ROLE haven_revenue_management_systems_dev;
+
+use ROLE securityadmin;
+
+GRANT ROLE _haven_master_dev__streamlits__usage TO ROLE haven_revenue_management_systems_dev;
+GRANT ROLE haven_revenue_management_systems_dev TO USER sarunasjatautis;
+
+use ROLE haven_schema_setup;
+use warehouse haven_schema_setup_warehouse_xsmall;
+use schema haven_master.procedures;
+
+DROP ROLE _HAVEN_STAGING_DEV__REVENUE_MANAGEMENT_FILE_UPLOADS__CREATOR;
+DROP ROLE _HAVEN_STAGING_DEV__REVENUE_MANAGEMENT_FILE_UPLOADS__OWNER;
+DROP ROLE _HAVEN_STAGING_DEV__REVENUE_MANAGEMENT_FILE_UPLOADS__READER;
+DROP ROLE _HAVEN_STAGING_DEV__REVENUE_MANAGEMENT_FILE_UPLOADS__USAGE;
+DROP ROLE _HAVEN_STAGING_DEV__REVENUE_MANAGEMENT_FILE_UPLOADS__WRITER;
+DROP ROLE _HAVEN_STAGING__REVENUE_MANAGEMENT_FILE_UPLOADS__CREATOR;
+DROP ROLE _HAVEN_STAGING__REVENUE_MANAGEMENT_FILE_UPLOADS__OWNER;
+DROP ROLE _HAVEN_STAGING__REVENUE_MANAGEMENT_FILE_UPLOADS__READER;
+DROP ROLE _HAVEN_STAGING__REVENUE_MANAGEMENT_FILE_UPLOADS__USAGE;
+DROP ROLE _HAVEN_STAGING__REVENUE_MANAGEMENT_FILE_UPLOADS__WRITER;
+
+DROP SCHEMA haven_staging_dev.REVENUE_MANAGEMENT_FILE_UPLOADS;
+DROP SCHEMA haven_staging.REVENUE_MANAGEMENT_FILE_UPLOADS;
+
+call haven_master.procedures.schema_role_creation('haven_staging_dev', 'revenue_management_systems_file_uploads');
+call haven_master.procedures.schema_role_creation('haven_staging', 'revenue_management_systems_file_uploads');
+
+grant role _haven_staging_dev__revenue_management_systems_file_uploads__creator to role streamlit_file_upload_application_dev;
+grant role _haven_staging__revenue_management_systems_file_uploads__creator to role streamlit_file_upload_application;
+
+-- 21/01/2026
+
+use role haven_schema_setup;
+use warehouse haven_schema_setup_warehouse_xsmall;
+use schema haven_master.procedures;
+call haven_master.procedures.schema_role_creation('haven_raw', 'revenue_management_file_uploads');
+call haven_master.procedures.schema_role_creation('haven_base', 'revenue_management_file_uploads');
+
+call haven_master.procedures.schema_role_creation('haven_raw', 'revenue_management_systems_file_uploads');
+call haven_master.procedures.schema_role_creation('haven_base', 'revenue_management_systems_file_uploads');
+
+call haven_master.procedures.schema_role_creation('haven_raw', 'PERFORMANCE_MARKETING_FILE_UPLOADS');
+call haven_master.procedures.schema_role_creation('haven_base', 'PERFORMANCE_MARKETING_FILE_UPLOADS');
+
+use role securityadmin;
+
+grant role _haven_raw__revenue_management_file_uploads__creator to role streamlit_file_upload_application;
+grant role _haven_base__revenue_management_file_uploads__creator to role streamlit_file_upload_application;
+grant role _haven_raw__revenue_management_systems_file_uploads__creator to role streamlit_file_upload_application;
+grant role _haven_base__revenue_management_systems_file_uploads__creator to role streamlit_file_upload_application;
+grant role _haven_raw__performance_marketing_file_uploads__creator to role streamlit_file_upload_application;
+grant role _haven_base__performance_marketing_file_uploads__creator to role streamlit_file_upload_application;
