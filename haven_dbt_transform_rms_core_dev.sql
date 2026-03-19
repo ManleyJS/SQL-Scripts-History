@@ -1,0 +1,288 @@
+USE ROLE sysadmin;
+
+CREATE WAREHOUSE haven_dbt_transform_rms_core_dev_warehouse_xsmall WITH WAREHOUSE_SIZE = 'XSMALL' WAREHOUSE_TYPE = 'STANDARD' 
+	AUTO_SUSPEND = 60 AUTO_RESUME = TRUE MIN_CLUSTER_COUNT = 1 MAX_CLUSTER_COUNT = 1 SCALING_POLICY = 'STANDARD';
+
+DROP warehouse haven_dbt_rms_core_dev_warehouse_medium;
+
+CREATE WAREHOUSE haven_dbt_transform_rms_core_dev_warehouse_medium WITH WAREHOUSE_SIZE = 'MEDIUM' WAREHOUSE_TYPE = 'STANDARD' 
+	AUTO_SUSPEND = 60 AUTO_RESUME = TRUE MIN_CLUSTER_COUNT = 1 MAX_CLUSTER_COUNT = 1 SCALING_POLICY = 'STANDARD';
+
+use ROLE useradmin;
+
+CREATE ROLE haven_dbt_transform_rms_core_dev;
+
+create role _haven_dbt_transform_rms_core_dev_warehouse_xsmall__operator;
+create role _haven_dbt_transform_rms_core_dev_warehouse_xsmall__usage;
+
+create role _haven_dbt_transform_rms_core_dev_warehouse_medium__operator;
+create role _haven_dbt_transform_rms_core_dev_warehouse_medium__usage;
+
+--CREATE special access roles
+
+CREATE ROLE _haven_dbt_transform_rms_core__HAVEN_STORE__COMMON__READER;
+CREATE ROLE _haven_dbt_transform_rms_core__HAVEN_STORE__PERFORMANCE_MARKETING__READER;
+CREATE ROLE _haven_dbt_transform_rms_core__HAVEN_BASE__HIT_ADMIN__READER;
+
+use ROLE securityadmin;
+
+grant usage, monitor on warehouse haven_dbt_transform_rms_core_dev_warehouse_xsmall to role _haven_dbt_transform_rms_core_dev_warehouse_xsmall__usage;
+grant role _haven_dbt_transform_rms_core_dev_warehouse_xsmall__usage to role _haven_dbt_transform_rms_core_dev_warehouse_xsmall__operator;
+grant operate, modify on warehouse haven_dbt_transform_rms_core_dev_warehouse_xsmall to role _haven_dbt_transform_rms_core_dev_warehouse_xsmall__operator;
+
+grant usage, monitor on warehouse haven_dbt_transform_rms_core_dev_warehouse_medium to role _haven_dbt_transform_rms_core_dev_warehouse_medium__usage;
+grant role _haven_dbt_transform_rms_core_dev_warehouse_medium__usage to role _haven_dbt_transform_rms_core_dev_warehouse_medium__operator;
+grant operate, modify on warehouse haven_dbt_transform_rms_core_dev_warehouse_medium to role _haven_dbt_transform_rms_core_dev_warehouse_medium__operator;
+
+GRANT ROLE _haven_dbt_transform_rms_core_dev_warehouse_xsmall__usage TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+GRANT ROLE _haven_dbt_transform_rms_core_dev_warehouse_medium__usage TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+
+GRANT ROLE _HAVEN_BASE__AMPLITUDE__READER TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+GRANT ROLE _HAVEN_BASE__BIGQUERY__READER TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+GRANT ROLE _HAVEN_BASE__BLUEYONDER__READER TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+GRANT ROLE _HAVEN_BASE__CYHH__READER TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+GRANT ROLE _HAVEN_BASE__DREAM__READER TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+GRANT ROLE _HAVEN_BASE__PLOT__READER TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+GRANT ROLE _HAVEN_BASE__PRICER__READER TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+GRANT ROLE _HAVEN_BASE__SEAWARE__READER TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+GRANT ROLE _HAVEN_BASE__ZONAL__READER TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+
+--GRANT ROLE _HAVEN_PIPELINE_QAT__BLUEYONDER__READER TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+--revoke ROLE _HAVEN_PIPELINE_QAT__BLUEYONDER__READER from ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+--GRANT ROLE _HAVEN_PIPELINE_UAT__BLUEYONDER__READER TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+
+GRANT ROLE _HAVEN_PIPELINE__BLUEYONDER__READER TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+GRANT ROLE _HAVEN_PIPELINE__PX0006_BLUEYONDER_PRICER__READER TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+GRANT ROLE _HAVEN_PIPELINE__PX0007_PITCH_PERFECT__READER TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+GRANT ROLE _HAVEN_STORE__ACTIVITIES__READER TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+GRANT ROLE _HAVEN_STORE__ALIGN_ALYTICS__READER TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+GRANT ROLE _HAVEN_STORE__AVAILABILITY__READER TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+GRANT ROLE _HAVEN_STORE__CARAVANS__READER TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+GRANT ROLE _HAVEN_STORE__CARAVAN_SALES_PRICING_APPLICATION__READER TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+GRANT ROLE _HAVEN_STORE__CARAVAN_SALES__READER TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+GRANT ROLE _HAVEN_STORE__COMMERCIAL__READER TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+GRANT ROLE _HAVEN_STORE__COMMON__READER TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+GRANT ROLE _HAVEN_STORE__COMPETITOR__READER TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+GRANT ROLE _HAVEN_STORE__DIGITAL__READER TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+GRANT ROLE _HAVEN_STORE__FINANCIAL_CUBE__READER TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+GRANT ROLE _HAVEN_STORE__HOLIDAY__READER TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+GRANT ROLE _HAVEN_STORE__MA_MART__READER TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+GRANT ROLE _HAVEN_STORE__OCANDC__READER TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+GRANT ROLE _HAVEN_STORE__PAYMENTS__READER TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+GRANT ROLE _HAVEN_STORE__PITCH_PERFECT__READER TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+GRANT ROLE _HAVEN_STORE__PRICER_DECISION_MATRIX__READER TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+GRANT ROLE _HAVEN_STORE__PRICER_FORECAST__READER TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+GRANT ROLE _HAVEN_STORE__PRICER__READER TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+GRANT ROLE _HAVEN_STORE__PROSPECTS__READER TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+GRANT ROLE _HAVEN_STORE__RETAIL__READER TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+GRANT ROLE _HAVEN_STORE__REVENUE_MANAGEMENT_REPORTING__READER TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+GRANT ROLE _HAVEN_STORE__SASMART__READER TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+GRANT ROLE _HAVEN_STORE__SAS_SCV__READER TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+GRANT ROLE _HAVEN_STORE__SURVEY__READER TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+GRANT ROLE _HAVEN_STORE__TROOPER2__READER TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+GRANT ROLE _HAVEN_STORE__TROOPER__READER TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+GRANT ROLE _HAVEN_STORE__TRPREPRS__READER TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+
+
+GRANT ROLE _haven_store__common__usage TO ROLE _haven_dbt_transform_rms_core__HAVEN_STORE__COMMON__READER;
+GRANT select ON TABLE HAVEN_STORE.COMMON.DIM_PARK TO ROLE _haven_dbt_transform_rms_core__HAVEN_STORE__COMMON__READER;
+grant ROLE _haven_dbt_transform_rms_core__HAVEN_STORE__COMMON__READER TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+
+GRANT ROLE _haven_store__performance_marketing__usage TO ROLE _haven_dbt_transform_rms_core__HAVEN_STORE__PERFORMANCE_MARKETING__READER;
+GRANT SELECT ON TABLE HAVEN_STORE.PERFORMANCE_MARKETING.DIM_BLOOMREACH_CUSTOMER TO ROLE _haven_dbt_transform_rms_core__HAVEN_STORE__PERFORMANCE_MARKETING__READER;
+grant ROLE _haven_dbt_transform_rms_core__HAVEN_STORE__PERFORMANCE_MARKETING__READER TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+
+GRANT ROLE _HAVEN_BASE__HIT_ADMIN__USAGE TO ROLE _haven_dbt_transform_rms_core__HAVEN_BASE__HIT_ADMIN__READER;
+GRANT SELECT ON view HAVEN_BASE.HIT_ADMIN.VRES_CYHH_PITCH_COST TO ROLE _haven_dbt_transform_rms_core__HAVEN_BASE__HIT_ADMIN__READER;
+grant ROLE _haven_dbt_transform_rms_core__HAVEN_BASE__HIT_ADMIN__READER TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+
+grant ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV TO USER haven_dbt_transform_dev;
+
+
+use ROLE securityadmin;
+
+grant role _haven_store_dev__pricer_decision_matrix__creator to role HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+grant role _haven_staging_dev__pricer_decision_matrix_staging__creator to role HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+
+grant role _haven_pipeline_dev__cyhh_pricing_pilot__creator to role HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+grant role _haven_staging_dev__cyhh_pricing_pilot_staging__creator to role HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+grant role _haven_store_dev__cyhh_pricing_pilot_reporting__creator to role HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+grant role _haven_staging_dev__decision_matrix_staging__creator to role HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+grant role _haven_store_dev__flex_calculator__creator to role HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+grant role _haven_staging_dev__flex_calculator_staging__creator to role HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+
+grant role _haven_pipeline_dev__Employees_Member_Benefit__creator to role HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+grant role _haven_staging_dev__Employees_Member_Benefit_staging__creator to role HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+grant role _haven_store_dev__Caravan_sales_Pricing_application__creator to role HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+grant role _haven_staging_dev__caravan_sales_pricing_application_staging__creator to role HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+grant role _haven_store_dev__part_exchange_model__creator to role HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+grant role _haven_staging_dev__part_exchange_model_staging__creator to role HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+grant role _haven_store_dev__decision_matrix_reporting__creator to role HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+grant role _haven_staging_dev__decision_matrix_reporting_staging__creator to role HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+grant role _haven_store_dev__rms_shared_resources__creator to role HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+
+--21/07/2025
+
+use ROLE securityadmin;
+
+GRANT ROLE _haven_store_dev__schema TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+GRANT ROLE _haven_staging_dev__schema TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+GRANT ROLE _haven_pipeline_dev__schema TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+
+
+
+-- 07/01/2026
+
+use ROLE dba;
+
+SHOW GRANTS TO ROLE haven_dbt_transform_rms_core_dev;
+
+use DATABASE haven_store_rms_dev;
+
+use SCHEMA decision_matrix_reporting;
+
+SHOW tables;
+SHOW views;
+
+SHOW schemas;
+
+use role haven_schema_setup;
+use warehouse haven_schema_setup_warehouse_xsmall;
+use schema haven_master.procedures;
+
+call haven_master.procedures.schema_role_creation('haven_store_rms_dev', 'rms_shared_resources');
+call haven_master.procedures.schema_role_creation('haven_store_rms_dev', 'rms_target_clustering');
+call haven_master.procedures.schema_role_creation('haven_store_rms_dev', 'cyhh_pricing_pilot_reporting');
+call haven_master.procedures.schema_role_creation('haven_store_rms_dev', 'flex_calculator');
+call haven_master.procedures.schema_role_creation('haven_store_rms_dev', 'employees_member_benefit');
+call haven_master.procedures.schema_role_creation('haven_store_rms_dev', 'part_exchange_model');
+call haven_master.procedures.schema_role_creation('haven_store_rms_dev', 'decision_matrix_reporting');
+
+call haven_master.procedures.schema_role_creation('haven_staging_rms_dev', 'rms_shared_resources');
+call haven_master.procedures.schema_role_creation('haven_staging_rms_dev', 'rms_target_clustering');
+call haven_master.procedures.schema_role_creation('haven_staging_rms_dev', 'cyhh_pricing_pilot_reporting');
+call haven_master.procedures.schema_role_creation('haven_staging_rms_dev', 'flex_calculator');
+call haven_master.procedures.schema_role_creation('haven_staging_rms_dev', 'employees_member_benefit');
+call haven_master.procedures.schema_role_creation('haven_staging_rms_dev', 'part_exchange_model');
+call haven_master.procedures.schema_role_creation('haven_staging_rms_dev', 'decision_matrix_reporting');
+
+use ROLE securityadmin;
+
+GRANT ROLE _haven_store_rms_dev__rms_shared_resources__creator TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+GRANT ROLE _haven_store_rms_dev__rms_target_clustering__creator TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+GRANT ROLE _haven_store_rms_dev__cyhh_pricing_pilot_reporting__creator TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+GRANT ROLE _haven_store_rms_dev__flex_calculator__creator TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+GRANT ROLE _haven_store_rms_dev__employees_member_benefit__creator TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+GRANT ROLE _haven_store_rms_dev__part_exchange_model__creator TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+GRANT ROLE _haven_store_rms_dev__decision_matrix_reporting__creator TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+
+GRANT ROLE _haven_staging_rms_dev__rms_shared_resources__creator TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+GRANT ROLE _haven_staging_rms_dev__rms_target_clustering__creator TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+GRANT ROLE _haven_staging_rms_dev__cyhh_pricing_pilot_reporting__creator TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+GRANT ROLE _haven_staging_rms_dev__flex_calculator__creator TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+GRANT ROLE _haven_staging_rms_dev__employees_member_benefit__creator TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+GRANT ROLE _haven_staging_rms_dev__part_exchange_model__creator TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+GRANT ROLE _haven_staging_rms_dev__decision_matrix_reporting__creator TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+
+GRANT ROLE _Haven_store_rms_dev__pricer_decision_matrix__creator TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+GRANT ROLE _Haven_staging_rms_dev__pricer_decision_matrix_staging__creator TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+
+GRANT ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV TO USER dillonsim;
+
+show GRANTS TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+
+SHOW grants TO ROLE  HAVEN_STAGING_RMS_DEV__SCHEMA;
+
+use ROLE useradmin;
+
+DROP ROLE HAVEN_STORE_RMS_DEV__SCHEMA;
+DROP ROLE HAVEN_STAGING_RMS_DEV__SCHEMA;
+DROP ROLE HAVEN_PIPELINE_RMS_DEV__SCHEMA;
+
+use ROLE securityadmin;
+
+REVOKE ROLE _HAVEN_STORE_DEV__SCHEMA FROM ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+REVOKE ROLE _HAVEN_STAGING_DEV__SCHEMA FROM ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+REVOKE ROLE _HAVEN_PIPELINE_DEV__SCHEMA FROM ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+
+GRANT ROLE _HAVEN_STORE_RMS_DEV__SCHEMA TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+GRANT ROLE _HAVEN_STAGING_RMS_DEV__SCHEMA TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+GRANT ROLE _HAVEN_PIPELINE_RMS_DEV__SCHEMA TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+
+GRANT ROLE _HAVEN_STORE_RMS_DEV__SCHEMA TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+GRANT ROLE _HAVEN_STAGING_RMS_DEV__SCHEMA TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+GRANT ROLE _HAVEN_PIPELINE_RMS_DEV__SCHEMA TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+
+SHOW GRANTS TO ROLE _HAVEN_STORE_RMS_DEV__SCHEMA;
+
+GRANT ROLE _haven_pipeline__cyhh_pricing_pilot__reader TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+GRANT ROLE _haven_store__flex_calculator_inputs__reader TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+GRANT ROLE _haven_store__flex_calculator_inputs__reader TO ROLE HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+
+
+-- below are either wrong, not needed, or need to be created properly;
+
+
+grant role _haven_staging_dev__pricer_decision_matrix__creator to role HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+grant role _haven_store_dev__cyhh_pricing_pilot__creator to role HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+grant role _haven_store_dev__cyhh_pricing_pilot_staging__creator to role HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+grant role _haven_store_dev__cyhh_pricing_pilot_reporting__creator to role HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+grant role _haven_store_dev__decision_matrix_staging__creator to role HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+grant role _haven_store_dev__flex_calculator__creator to role HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+grant role _haven_store_dev__flex_calculator_staging__creator to role HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+grant role _haven_store_dev__emb__creator to role HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+grant role _haven_store_dev__emb_staging__creator to role HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+grant role _haven_store_dev__staff_pricing__creator to role HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+grant role _haven_store_dev__staff_pricing_staging__creator to role HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+grant role _haven_store_dev__Caravan_Pricing__creator to role HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+grant role _haven_store_dev__caravan_sales_pricing_app_staging__creator to role HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+grant role _haven_store_dev__pex_model__creator to role HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+grant role _haven_store_dev__pex_model_staging__creator to role HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+grant role _haven_store_dev__decision_matrix_reporting_staging__creator to role HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+grant role _haven_store_dev__decision_matrix_reporting__creator to role HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+grant role _haven_store_dev__rms_shared_resources__creator to role HAVEN_DBT_TRANSFORM_RMS_CORE_DEV;
+
+
+-- 19/01/2026
+
+use role dba;
+
+show grants to role haven_dbt_development_rms;
+
+show roles like '%haven_store_rms_dev%';
+
+show grants to role _HAVEN_STORE_RMS_DEV__SCHEMA;
+
+show grants to role _HAVEN_STORE_RMS_DEV__USAGE;
+
+use role useradmin;
+
+CREATE ROLE _HAVEN_STORE_RMS_DEV__DEVELOPMENT__USAGE
+
+SHOW GRANTS TO ROLE _HAVEN_STORE_RMS_DEV__DEVELOPMENT__USAGE;
+
+SHOW GRANTS TO ROLE _HAVEN_STORE_QAT__DEVELOPMENT__USAGE;
+
+use ROLE securityadmin;
+
+GRANT ROLE _HAVEN_STORE_RMS_DEV__DEVELOPMENT__USAGE TO ROLE haven_dbt_development_rms;
+
+USE ROLE haven_dbt_development_rms;
+
+use DATABASE haven_store_rms_dev;
+
+SHOW schemas;
+
+GRANT USAGE ON future SCHEMAS IN DATABASE HAVEN_STORE_RMS_DEV TO ROLE _HAVEN_STORE_RMS_DEV__DEVELOPMENT__USAGE;
+GRANT SELECT ON future TABLES IN DATABASE HAVEN_STORE_RMS_DEV TO ROLE _HAVEN_STORE_RMS_DEV__DEVELOPMENT__USAGE;
+GRANT SELECT ON future VIEWS IN DATABASE HAVEN_STORE_RMS_DEV TO ROLE _HAVEN_STORE_RMS_DEV__DEVELOPMENT__USAGE;
+GRANT SELECT ON future MATERIALIZED VIEWS IN DATABASE HAVEN_STORE_RMS_DEV TO ROLE _HAVEN_STORE_RMS_DEV__DEVELOPMENT__USAGE;
+GRANT USAGE ON future STAGES IN DATABASE HAVEN_STORE_RMS_DEV TO ROLE _HAVEN_STORE_RMS_DEV__DEVELOPMENT__USAGE;
+GRANT USAGE ON future FILE FORMATS IN DATABASE haven_store_qat TO ROLE _HAVEN_STORE_RMS_DEV__DEVELOPMENT__USAGE;
+
+GRANT USAGE ON all SCHEMAS IN DATABASE HAVEN_STORE_RMS_DEV TO ROLE _HAVEN_STORE_RMS_DEV__DEVELOPMENT__USAGE;
+GRANT SELECT ON all TABLES IN DATABASE HAVEN_STORE_RMS_DEV TO ROLE _HAVEN_STORE_RMS_DEV__DEVELOPMENT__USAGE;
+GRANT SELECT ON all VIEWS IN DATABASE HAVEN_STORE_RMS_DEV TO ROLE _HAVEN_STORE_RMS_DEV__DEVELOPMENT__USAGE;
+GRANT SELECT ON all MATERIALIZED VIEWS IN DATABASE HAVEN_STORE_RMS_DEV TO ROLE _HAVEN_STORE_RMS_DEV__DEVELOPMENT__USAGE;
+GRANT USAGE ON all STAGES IN DATABASE HAVEN_STORE_RMS_DEV TO ROLE _HAVEN_STORE_RMS_DEV__DEVELOPMENT__USAGE;
+GRANT USAGE ON all FILE FORMATS IN DATABASE haven_store_qat TO ROLE _HAVEN_STORE_RMS_DEV__DEVELOPMENT__USAGE;

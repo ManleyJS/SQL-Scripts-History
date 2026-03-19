@@ -1,0 +1,155 @@
+USE ROLE sysadmin;
+
+CREATE WAREHOUSE haven_owners_finance_warehouse_small WITH WAREHOUSE_SIZE = 'SMALL' WAREHOUSE_TYPE = 'STANDARD' 
+	AUTO_SUSPEND = 60 AUTO_RESUME = TRUE MIN_CLUSTER_COUNT = 1 MAX_CLUSTER_COUNT = 4 SCALING_POLICY = 'STANDARD';
+
+use role useradmin;
+
+create role _haven_owners_finance_warehouse_small__operator;
+create role _haven_owners_finance_warehouse_small__usage;
+
+CREATE ROLE haven_owners_finance_sigma;
+
+create user haven_owners_finance_sigma_service_account
+LOGIN_NAME = 'haven.owners.finance.sigma.service.account'
+default_warehouse = haven_owners_finance_warehouse_small
+default_role = haven_owners_finance_sigma
+rsa_public_key = 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAvzac/TqfltIxjeDqH2wH
+3oEfh0n3gUw51yW7ClBXWy/CPM88m8Xl7BgevXlxF+XMHi4bN95sVjeWXYDs07EO
+IhHiMmgZ2GnV6Eggan2AghoPdHa8xGFERbFh2J9U2RH54qemqKomPgcczKjYT9DY
++R+A+peLwgZj+ZYwJVvHaeuMnPxZWBKIw4BWmksS9KsRsXD2CtSHHtN1wl8V7js7
+s5f6OIQlAgzUSCZGiOk+O+75GFKuSK+OcoBkR9X7X5+t6MEzrSmQdXC04UTCPJGd
+m0sLP4Lo5x2oGlMjELdEizpynym7Gqalf1uDf2DgIosK1uIBU+qiHa6JLQx/cBQt
+zQIDAQAB';
+
+
+USE ROLE securityadmin;
+
+grant usage, monitor on warehouse haven_owners_finance_warehouse_small to role _haven_owners_finance_warehouse_small__usage;
+grant role _haven_owners_finance_warehouse_small__usage to role _haven_owners_finance_warehouse_small__operator;
+grant operate, modify on warehouse haven_owners_finance_warehouse_small to role _haven_owners_finance_warehouse_small__operator;
+
+GRANT ROLE _haven_owners_finance_warehouse_small__usage TO ROLE haven_owners_finance_sigma;
+GRANT ROLE haven_owners_finance_sigma TO USER haven_owners_finance_sigma_service_account;  
+
+GRANT ROLE _haven_store__caravans_sale_restricted__reader TO ROLE haven_owners_finance_sigma;
+
+
+-- 10/12/2025
+
+USER ROLE useradmin;
+
+CREATE ROLE _haven_owners_finance_sigma__haven_store__caravans__reader;
+
+use ROLE securityadmin;
+
+GRANT ROLE _haven_store__caravans__usage TO ROLE _haven_owners_finance_sigma__haven_store__caravans__reader;
+
+grant select on table haven_store.caravans.fct_signup TO ROLE _haven_owners_finance_sigma__haven_store__caravans__reader;
+grant select on table haven_store.caravans.fct_sale_invoice TO ROLE _haven_owners_finance_sigma__haven_store__caravans__reader;
+grant select on table haven_store.caravans.fct_van_history TO ROLE _haven_owners_finance_sigma__haven_store__caravans__reader;
+grant select on table haven_store.caravans.fct_pitch_charges TO ROLE _haven_owners_finance_sigma__haven_store__caravans__reader;
+grant select on table haven_store.caravans.fct_pitch_status TO ROLE _haven_owners_finance_sigma__haven_store__caravans__reader;
+grant select on table haven_store.caravans.fct_pitch_utilities TO ROLE _haven_owners_finance_sigma__haven_store__caravans__reader;
+grant select on table haven_store.caravans.fct_van_attributes TO ROLE _haven_owners_finance_sigma__haven_store__caravans__reader;
+grant select on table haven_store.caravans.dim_sale_event TO ROLE _haven_owners_finance_sigma__haven_store__caravans__reader;
+grant select on table haven_store.caravans.dim_pitch_history TO ROLE _haven_owners_finance_sigma__haven_store__caravans__reader;
+grant select on table haven_store.caravans.dim_van_history TO ROLE _haven_owners_finance_sigma__haven_store__caravans__reader;
+grant select on table haven_store.caravans.dim_sale_status TO ROLE _haven_owners_finance_sigma__haven_store__caravans__reader;
+grant select on table haven_store.caravans.dim_sale_type_scd1 TO ROLE _haven_owners_finance_sigma__haven_store__caravans__reader;
+grant select on table haven_store.caravans.dim_owner_account_history TO ROLE _haven_owners_finance_sigma__haven_store__caravans__reader;
+grant select on table haven_store.caravans.dim_finance_company TO ROLE _haven_owners_finance_sigma__haven_store__caravans__reader;
+grant select on table haven_store.caravans.dim_holiday_home_advisor_scd1 TO ROLE _haven_owners_finance_sigma__haven_store__caravans__reader;
+grant select on table haven_store.caravans.dim_sale_source_scd1 TO ROLE _haven_owners_finance_sigma__haven_store__caravans__reader;
+grant select on table haven_store.caravans.dim_account_owner_type TO ROLE _haven_owners_finance_sigma__haven_store__caravans__reader;
+grant select on table haven_store.caravans.dim_charge_type TO ROLE _haven_owners_finance_sigma__haven_store__caravans__reader;
+grant select on table haven_store.caravans.dim_letting_contract_type TO ROLE _haven_owners_finance_sigma__haven_store__caravans__reader;
+grant select on table haven_store.caravans.dim_pitch_grade_scd1 TO ROLE _haven_owners_finance_sigma__haven_store__caravans__reader;
+grant select on table haven_store.caravans.dim_pitch_scd1 TO ROLE _haven_owners_finance_sigma__haven_store__caravans__reader;
+grant select on table haven_store.caravans.dim_pitch_status TO ROLE _haven_owners_finance_sigma__haven_store__caravans__reader;
+grant select on table haven_store.caravans.dim_van_attributes_type TO ROLE _haven_owners_finance_sigma__haven_store__caravans__reader;
+grant select on table haven_store.caravans.dim_van_order_details TO ROLE _haven_owners_finance_sigma__haven_store__caravans__reader;
+grant select on table haven_store.caravans.dim_van_pdi TO ROLE _haven_owners_finance_sigma__haven_store__caravans__reader;
+grant select on table haven_store.caravans.dim_van_pdi_fault TO ROLE _haven_owners_finance_sigma__haven_store__caravans__reader;
+grant select on table haven_store.caravans.dim_van_repair_history TO ROLE _haven_owners_finance_sigma__haven_store__caravans__reader;
+grant select on table haven_store.caravans.fct_account_history TO ROLE _haven_owners_finance_sigma__haven_store__caravans__reader;
+grant select on table haven_store.caravans.fct_pitch_charges TO ROLE _haven_owners_finance_sigma__haven_store__caravans__reader;
+grant select on table haven_store.caravans.fct_pitch_status TO ROLE _haven_owners_finance_sigma__haven_store__caravans__reader;
+grant select on table haven_store.caravans.fct_pitch_utilities TO ROLE _haven_owners_finance_sigma__haven_store__caravans__reader;
+grant select on table haven_store.caravans.fct_sale_invoice TO ROLE _haven_owners_finance_sigma__haven_store__caravans__reader;
+grant select on table haven_store.caravans.fct_van_attributes TO ROLE _haven_owners_finance_sigma__haven_store__caravans__reader;
+grant select on table haven_store.caravans.fct_van_history TO ROLE _haven_owners_finance_sigma__haven_store__caravans__reader;
+grant select on table haven_store.caravans.site_fee_ledger TO ROLE _haven_owners_finance_sigma__haven_store__caravans__reader;
+grant select on table haven_store.caravans.letting_income_detail TO ROLE _haven_owners_finance_sigma__haven_store__caravans__reader;
+grant select on table haven_store.caravans.letting_detail TO ROLE _haven_owners_finance_sigma__haven_store__caravans__reader;
+grant select on table haven_store.caravans.caravan_sales_budget_daily_current TO ROLE _haven_owners_finance_sigma__haven_store__caravans__reader;
+grant select on table haven_store.caravans.caravan_sales_budget_weekly_current TO ROLE _haven_owners_finance_sigma__haven_store__caravans__reader;
+grant select on table haven_store.caravans.fct_rent_ledger TO ROLE _haven_owners_finance_sigma__haven_store__caravans__reader;
+grant select on table haven_store.caravans.dim_rent_ledger_invoice TO ROLE _haven_owners_finance_sigma__haven_store__caravans__reader;
+
+GRANT ROLE _haven_owners_finance_sigma__haven_store__caravans__reader TO ROLE haven_owners_finance_sigma;
+
+GRANT ROLE haven_owners_finance_sigma TO ROLE dba;
+
+use ROLE haven_owners_finance_sigma;
+
+use ROLE dba;
+
+use SCHEMA haven_store.caravans;
+
+SHOW TABLEs;
+
+-- 12/12/2025
+
+use role useradmin;
+
+CREATE ROLE _haven_owners_finance_sigma__haven_store__common__reader;
+
+use ROLE securityadmin;
+
+GRANT ROLE _haven_store__common__usage TO ROLE _haven_own
+
+GRANT SELECT ON TABLE haven_store.common.dim_park TO ROLE _haven_owners_finance_sigma__haven_store__common__reader;
+GRANT SELECT ON TABLE haven_store.common.dim_calendar TO ROLE _haven_owners_finance_sigma__haven_store__common__reader;
+
+GRANT ROLE _haven_owners_finance_sigma__haven_store__common__reader TO ROLE haven_owners_finance_sigma; 
+
+-- 17/12/2025
+
+use ROLE securityadmin;
+
+grant select on table haven_store.caravans.fct_caravan_sales_ledger TO ROLE _haven_owners_finance_sigma__haven_store__caravans__reader;
+grant select on table haven_store.caravans.dim_caravan_sales_ledger_invoice TO ROLE _haven_owners_finance_sigma__haven_store__caravans__reader;
+
+
+-- private key
+
+-----BEGIN PRIVATE KEY-----
+MIIEwAIBADANBgkqhkiG9w0BAQEFAASCBKowggSmAgEAAoIBAQC/Npz9Op+W0jGN
+4OofbAfegR+HSfeBTDnXJbsKUFdbL8I8zzybxeXsGB69eXEX5cweLhs33mxWN5Zd
+gOzTsQ4iEeIyaBnYadXoSCBqfYCCGg90drzEYURFsWHYn1TZEfnip6aoqiY+BxzM
+qNhP0Nj5H4D6l4vCBmP5ljAlW8dp64yc/FlYEojDgFaaSxL0qxGxcPYK1Ice03XC
+XxXuOzuzl/o4hCUCDNRIJkaI6T477vkYUq5Ir45ygGRH1ftfn63owTOtKZB1cLTh
+RMI8kZ2bSws/gujnHagaUyMQt0SLOnKfKbsapqV/W4N/YOAiiwrW4gFT6qIdrokt
+DH9wFC3NAgMBAAECggEBAItrXbJCEWTd4+XoLa01jtNM4Nk7NG0hUDcwOp29kMRb
+IUxHapDGDexEdf1/U9ex5U/IHG5zDhkbNNb+jy+XNI/g7EYGo3mpSZ+xH3mmApJa
+QBSSEvc5WJdcS9Sv8CTKN6JszVbDoViuxO/w2K/xvpJ+xwNwhiW1lSXBvV8v+Umf
+gcNYVHD7O9uLvfPagTezK+ti76kR4t/9BTi4EmncV/ltx2qYGLBrNgMfm1StQjQ1
+geiIsboNhMUHl5p/buA1emJN+cKJvKqS9e3Cyyn8MzghoAHJYTqkFVrUSClrEIlL
+tROsFORZ0VwkIBGLZcs46f2b6r8JBViaXmamic3yjR0CgYEA+2R+1BBNTlEESkHS
+zA2wAy6YE5r12/xeU6phUGFbrgHXYUIAwFzbjvUxBbR+MALMkCG7b1TZffsm5hYL
+4zZdnxcRLGqRLF+EpS/GokvtUwIr3avnhssnzDIVM5113J7B/qa7MT642nA4BS2I
+jsgJWrq+m4sPdQNMRve9kTQ/GKsCgYEAwrfDjuJmmOion7eY9M+RK81QmsGB2QKU
+/fna0HwmIx9IxVzMSe+tC1LlUW+bLPzhz4oxVl7oDiCiR5N2zU4b9W/uNIbdzgZx
+AY/rdoFCzDCudYX4cgEaOB+VyO7AXpr6l11BgdN+HaieQWn7jRb9Xxf0ZrTQzWbY
+XGZuFL61w2cCgYEAm+++bDSgf0/p5VXnOAPVhmPEmYSptQdaS3OIYZ/CirFBtGaI
+qMnwt0CIZA2NqKJT2aPS7EApmOfNPTO3s/zpHeHlGTQRUQD++qgkAlAuqirSovIa
+75Xc3eDDHf0yOuOPWjJ6MxXA/F5XoX6ZElgq1Ui5KyqbL+4Xxn2t7QAHk3kCgYEA
+rCY1gdzN4kBH3LVASKg+a6BgtAGC4C51NTmx6ALq4MBm4P6TKob40XsffOkUIykM
+JyXBSuArf1oAvxEzxn1ZIJwt2EioTt7JCB2KikHroYUkqIiiR4CMArSCA5x5fOq9
+xBbRtIscA/Kwv5qIqIt7xJf0Ht2bgQ19GewBRNv67N8CgYEAyxtmLhTKic+hm4xd
+vlDhdprVffhSYi+7ckygh5gwpRLqCAhlhBfdL0efzX0+T3rB5qMycnbLUOVg/5RY
+u1K3nlS0IqpI4kEvf1OHYokH/T12UZes1aeZ1WNx1m/1TaAG4GFOTq8mbUbcMrsa
+vE6wNSpkgik2ULobMJh0u29JNak=
+-----END PRIVATE KEY-----
+

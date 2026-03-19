@@ -1,0 +1,48 @@
+use role accountadmin;
+
+DROP STREAM HAVEN_STORE.HOLIDAY.FCT_HOLIDAY_BOOKINGS_STREAM ;
+
+USE ROLE DBA;
+
+CREATE STREAM IF NOT EXISTS HAVEN_STORE.RMS_PRICER.FCT_HOLIDAY_BOOKINGS_STREAM 
+    ON TABLE HAVEN_STORE.HOLIDAY.FCT_HOLIDAY_BOOKINGS
+    SHOW_INITIAL_ROWS = FALSE;
+
+CREATE STREAM IF NOT EXISTS HAVEN_STORE_AA_DEV.RMS_PRICER.FCT_HOLIDAY_BOOKINGS_STREAM 
+    ON TABLE HAVEN_STORE.HOLIDAY.FCT_HOLIDAY_BOOKINGS
+    SHOW_INITIAL_ROWS = FALSE;
+
+use role useradmin;
+
+create role _haven_dbt_transform_align_alytics_dev__haven_store_aa_dev__rms_pricer__reader;
+create role _haven_dbt_transform__haven_store__rms_pricer__reader;
+
+use role securityadmin;
+use role dba;
+grant role _haven_store__holiday__usage to role _haven_dbt_transform_align_alytics_dev__haven_store_aa_dev__rms_pricer__reader;
+grant select on table HAVEN_STORE.HOLIDAY.FCT_HOLIDAY_BOOKINGS to role _haven_dbt_transform_align_alytics_dev__haven_store_aa_dev__rms_pricer__reader;
+grant role _haven_store_aa_dev__rms_pricer__usage to role _haven_dbt_transform_align_alytics_dev__haven_store_aa_dev__rms_pricer__reader;
+grant select on stream HAVEN_STORE_AA_DEV.RMS_PRICER.FCT_HOLIDAY_BOOKINGS_STREAM to role _haven_dbt_transform_align_alytics_dev__haven_store_aa_dev__rms_pricer__reader;
+grant role _haven_dbt_transform_align_alytics_dev__haven_store_aa_dev__rms_pricer__reader to role haven_dbt_transform_align_alytics_dev;
+
+grant role _haven_store__holiday__usage to role _haven_dbt_transform__haven_store__rms_pricer__reader;
+grant select on table HAVEN_STORE.HOLIDAY.FCT_HOLIDAY_BOOKINGS to role _haven_dbt_transform__haven_store__rms_pricer__reader;
+grant role _haven_store__rms_pricer__usage to role _haven_dbt_transform__haven_store__rms_pricer__reader;
+grant select on stream HAVEN_STORE.RMS_PRICER.FCT_HOLIDAY_BOOKINGS_STREAM to role _haven_dbt_transform__haven_store__rms_pricer__reader;
+grant role _haven_dbt_transform__haven_store__rms_pricer__reader to role haven_dbt_transform;
+
+
+grant role _haven_store_aa_dev__rms_pricer__usage to role _haven_dbt_transform_align_alytics_dev__haven_store_aa_dev__rms_pricer__reader;
+
+
+grant select on stream HAVEN_STORE_AA_DEV.RMS_PRICER.FCT_HOLIDAY_BOOKINGS_STREAM 
+to role _haven_store_aa_dev__rms_pricer__reader;
+
+grant select on stream HAVEN_STORE.RMS_PRICER.FCT_HOLIDAY_BOOKINGS_STREAM 
+to role _haven_store__rms_pricer__reader;
+
+use role dba;
+
+use schema HAVEN_STORE.HOLIDAY;
+
+show streams;

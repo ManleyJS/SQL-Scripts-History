@@ -1,0 +1,80 @@
+USE ROLE sysadmin;
+
+DROP WAREHOUSE haven_data_science_sigma_warehouse_small; 
+
+CREATE WAREHOUSE haven_data_science_sigma_warehouse_small WITH WAREHOUSE_SIZE = 'SMALL' WAREHOUSE_TYPE = 'STANDARD' 
+	AUTO_SUSPEND = 60 AUTO_RESUME = TRUE MIN_CLUSTER_COUNT = 1 MAX_CLUSTER_COUNT = 4 SCALING_POLICY = 'STANDARD';
+
+use role useradmin;
+
+create role _haven_data_science_sigma_warehouse_small__operator;
+create role _haven_data_science_sigma_warehouse_small__usage;
+
+CREATE ROLE haven_data_science_sigma;
+
+create user haven_data_science_sigma_service_account
+LOGIN_NAME = 'haven.data.science.sigma.service.account'
+default_warehouse = haven_data_science_sigma_warehouse_small
+default_role = haven_data_science_sigma
+rsa_public_key = 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA27LIowOBj4qDbqpAd2Bz
+lIlLKNEm29F/uVt9Ye33MIQ69/d8boQGjmlu/Sne2bQ9DO+06RlkKn5FkSNUQh4r
+1nA4K8ReCDfvyYkPb1Mx8Qb1neDIMtSmIYzI+xkRet6svbgyC0iUBgBX3foE8i9h
+Dt2BIVuKHQBrY/H0AF80Qekh3DCrGivA7iVLQkMJkHjfh4scOhaJvJAS7cuooEMY
+KvcmnUvcsmZ4eQ5nIZnJHG3BosFU0fpj1E/Tz7W6aQpn4Dlsk0DDHVR2Ft57J/4O
+CFXmaumsQ+g+ZVQALEJnS+wgdtiavh79D/x2brZ4BU7YLCu6VA2AU+oH3l9uEQGx
+6wIDAQAB';
+
+
+USE ROLE securityadmin;
+
+grant usage, monitor on warehouse haven_data_science_sigma_warehouse_small to role _haven_data_science_sigma_warehouse_small__usage;
+grant role _haven_data_science_sigma_warehouse_small__usage to role _haven_data_science_sigma_warehouse_small__operator;
+grant operate, modify on warehouse haven_data_science_sigma_warehouse_small to role _haven_data_science_sigma_warehouse_small__operator;
+
+GRANT ROLE _haven_data_science_sigma_warehouse_small__usage TO ROLE haven_data_science_sigma;
+GRANT ROLE haven_data_science_sigma TO USER haven_data_science_sigma_service_account; 
+
+GRANT ROLE _haven_data_science__data_science__reader TO ROLE haven_data_science_sigma;
+
+use ROLE useradmin;
+
+CREATE ROLE _haven_data_science_sigma__haven_store__caravans__reader;
+
+use ROLE securityadmin;
+
+GRANT ROLE _haven_data_science_sigma__haven_store__caravans__reader TO ROLE haven_data_science_sigma;
+
+GRANT ROLE _haven_store__caravans__usage TO ROLE _haven_data_science_sigma__haven_store__caravans__reader;
+GRANT SELECT ON TABLE HAVEN_STORE.CARAVANS.OWNER_STATUS_TIME_SERIES_ANALYSIS TO ROLE _haven_data_science_sigma__haven_store__caravans__reader;
+GRANT SELECT ON TABLE HAVEN_STORE.CARAVANS.SITE_FEE_LEDGER TO ROLE _haven_data_science_sigma__haven_store__caravans__reader; 
+
+----- key details
+
+-----BEGIN PRIVATE KEY-----
+MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQDbssijA4GPioNu
+qkB3YHOUiUso0Sbb0X+5W31h7fcwhDr393xuhAaOaW79Kd7ZtD0M77TpGWQqfkWR
+I1RCHivWcDgrxF4IN+/JiQ9vUzHxBvWd4Mgy1KYhjMj7GRF63qy9uDILSJQGAFfd
++gTyL2EO3YEhW4odAGtj8fQAXzRB6SHcMKsaK8DuJUtCQwmQeN+Hixw6Fom8kBLt
+y6igQxgq9yadS9yyZnh5DmchmckcbcGiwVTR+mPUT9PPtbppCmfgOWyTQMMdVHYW
+3nsn/g4IVeZq6axD6D5lVAAsQmdL7CB22Jq+Hv0P/HZutngFTtgsK7pUDYBT6gfe
+X24RAbHrAgMBAAECggEAK0+7ridqy1mLP63gt6gUIRxP7OQOvRc4DtqyhTPcn3vy
+BCCOL1tnz3uJne87N8AIqRw4lhujW505KbvFSKOaENRevoIf547ffuO+XzwPhGzS
+zyUZUqwJdGPE23u9rnNnqp89fmv4gpZevCwl/XjJsZyJcIITYFRM149Dgy9Bphxq
+PFdzGwZsMnB+VjY0C5GWL2lTaMKO8SIHseRHMNIsMBea3F+2zjNaE6SH6fojJ0To
+F0rFXJJFEuOqJICSJhevMTB7Y1D/iS22S09huFJb4bo2Yq62jfe4lVNIeaDWnb9V
+gXn5fNlmQwqg8ixf+yf2Aavby1nPP2kI/TRM2O3lAQKBgQD0MJ7TIFEpy8ZdveNN
++5Nf+tkYWb8UHR5U6mkhKiYXKbrNSul+Exv5CHvPAUtz7KmaHVkRNxHX1Dnn7eHv
+uist3dwn76jkv2LpsGR1RpSWN/HSnfUkNXttrIJFdHV7FMrhFhzzf0LfMD0RAAsK
+KpNh1j9JcehMlIOLDPS1szxXcQKBgQDmUu1RMKteXoNe4VTouRWm1114qObrpH9b
+qCkgKvNfwFQRRxQoxNDpgWcXSK+3mIrxiw6ci2Gecbm5oUIk52zVVehaR7oNFd/O
+Kc/WfaA7BbB6lEPDkJli7iluYB3CjeCq/iXMhQY4QgI1yHENpVBxOxkImM0EU+wb
+Xen3WemJGwKBgFlO4veyjRytM4qbZWPjC96Bnx7BzBmuIKbL6NFBWhcEoxZsPINo
+t8VX7fgisBbgypLcAvRB4Nu/+cGyhfyoaRxoVRmiFHI88Q8o/UTLIJLkOSRfswWg
+LdlJy4dddY4jZ6P083e25p08RklOa7s3IRoaQqE48M35Tzbu8Rz3Ra1xAoGAMYO4
+YxDsdmApK9eTUmifv/tiq9LbueLmQkUXekPhiD8nk4NNUSpmoxxflkDZDcYscJrt
+bDgGp3JZdA+30Yky+3X5epca5z9BmuegN8NQFAA4HVIMc1l9sCf1HjZpj27C0t/K
+LnqWiLegFAHgVAerEHyc+B0pTfngs01wQ+2/Z+sCgYAsx0H4XGMZta3i7mccpOzN
+w/3vparJmTVKoKx7Z36sibk63mlzDlJALsiiWcVfjoUsWhPBGAgsHCK0W/IqHWqJ
+TTUP0FdEaMj4Vt5ChVTVfww4iOQs5njUL00gFHwEH0QJvLz0PQQlIv86uhZqFhaI
+iHWUO/Ydae2XISVMknpJEw==
+-----END PRIVATE KEY-----

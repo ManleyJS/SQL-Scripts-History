@@ -1,0 +1,84 @@
+use ROLE sysadmin;
+
+CREATE WAREHOUSE haven_bloomreach_integration_dev_warehouse_xsmall WITH WAREHOUSE_SIZE = 'xsmall' WAREHOUSE_TYPE = 'STANDARD' 
+	AUTO_SUSPEND = 60 AUTO_RESUME = TRUE MIN_CLUSTER_COUNT = 1 MAX_CLUSTER_COUNT = 1 SCALING_POLICY = 'STANDARD';
+
+CREATE DATABASE haven_bloomreach_integration;
+
+USE ROLE useradmin;
+
+CREATE ROLE _haven_bloomreach_integration__USAGE;
+create role _haven_bloomreach_integration_dev_warehouse_xsmall__operator;
+create role _haven_bloomreach_integration_dev_warehouse_xsmall__usage;
+
+CREATE ROLE haven_bloomreach_integration_dev;
+
+CREATE ROLE _haven_bloomreach_integration_dev__haven_store__common__reader;
+
+create OR replace user haven_bloomreach_integration_dev_service_account
+LOGIN_NAME = 'haven.bloomreach.integration.dev.service.account'
+default_warehouse = haven_bloomreach_integration_dev_warehouse_xsmall
+default_role = haven_bloomreach_integration_dev
+rsa_public_key = '';
+
+ALTER user haven_bloomreach_integration_dev_service_account
+SET rsa_public_key = 'MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAmBn2ZQAyBlCBfASN2jQW
+eV+Fa/9P7lH5VBMqbJbvlPaKBoYwwOFJB0NDikkV/Y0Z1LNjTnfZo/Ux17UyKqyr
+pVUZatQF3+jD+vEWCaWiMyV70RHNL6XDTqtSlAXzwQOP59e4Ess+JCsl3AgAIA2r
+mxm2jthrOmsQrM+BNxnWftY0FN9B2luZKNfkG8rsYorXrtj3M2GqFWyM4kMjxMec
+BgHaLuiLms7883WaqGe+ZEan+Y4GvOD5vBz8lXiZmtdIFk0T43PS5uFO0+V8yPrk
+m2Y9tPVq7C0iceRM7Usxmg6Qi0yytHRw6tLxxTz9oWLQibWCuwT5opL5msONion5
+H6/UHa7JHbZFGs5UC7Nf7iNVXmqyhz4hqjJCOtvjLtqTw7T/hGAzvWYLg077gUl5
+ZwBf6V8NGc8ZlxrZq7CfhREEwgMDGdcx896O3vzDTGMsdF3uFulfZh2ASvYyvEKu
+e4MO4z8/qTwIrF6imya/nJq24Jw5sbWUYvUszYm3AI79rKvZs5Ab7iDaCtEm9Gbx
+XbtJMyGMeFXGIV0N9bkcb38Gzy4vra3ImEF29CKxl8gMgRY6ncbpN/WVdui9TL6B
+Z56BxvhLD07WAvXOBqzE8RisWGqPf1xjH84xQTnmfxUO5j42GySkdQ/hUlJ53Khv
+n2NmYdAdwTApm1XFuYHDJ5ECAwEAAQ==';
+
+use ROLE securityadmin;
+
+GRANT USAGE ON DATABASE haven_bloomreach_integration TO ROLE _haven_bloomreach_integration__USAGE;
+
+grant usage, monitor on warehouse haven_bloomreach_integration_dev_warehouse_xsmall to role _haven_bloomreach_integration_dev_warehouse_xsmall__usage;
+grant role _haven_bloomreach_integration_dev_warehouse_xsmall__usage to role _haven_bloomreach_integration_dev_warehouse_xsmall__operator;
+grant operate, modify on warehouse haven_bloomreach_integration_dev_warehouse_xsmall to role _haven_bloomreach_integration_dev_warehouse_xsmall__operator;
+
+GRANT ROLE _haven_bloomreach_integration_dev_warehouse_xsmall__usage TO ROLE haven_bloomreach_integration_dev;
+
+--GRANT ROLE _haven_store__common__usage TO ROLE _haven_bloomreach_integration_dev__haven_store__common__reader;
+--GRANT SELECT ON VIEW haven_store.common.postcode_directory TO ROLE _haven_bloomreach_integration_dev__haven_store__common__reader;
+
+--GRANT ROLE _haven_bloomreach_integration_dev__haven_store__common__reader TO ROLE haven_bloomreach_integration_dev;
+
+show grants TO ROLE haven_bloomreach_integration_dev;
+
+GRANT ROLE haven_bloomreach_integration_dev TO ROLE dba;
+GRANT ROLE haven_bloomreach_integration_dev TO USER haven_bloomreach_integration_dev_service_account;
+GRANT ROLE haven_bloomreach_integration_dev TO USER 
+
+GRANT ROLE _haven_bloomreach_integration__bloomreach_integration__creator TO ROLE haven_development_abdulkahare;
+
+use ROLE haven_bloomreach_integration_dev;
+
+use DATABASE haven_bloomreach_integration;
+
+show schemas;
+
+show warehouses;
+
+use SCHEMA common;
+
+show views;
+
+use ROLE securityadmin;
+
+revoke ROLE _haven_bloomreach_integration_dev__haven_store__common__reader from ROLE haven_bloomreach_integration_dev;
+revoke ROLE _haven_work__bloomreach_integration__creator from ROLE haven_bloomreach_integration_dev;
+
+use ROLE haven_bloomreach_integration_dev;
+
+use DATABASE haven_work;
+
+show schemas;
+
+show warehouses;
