@@ -1,0 +1,872 @@
+-- 14/11/2025
+
+-- add to base table
+
+with cte as (
+select COLLECTIONID, MACHINEREF, NAME
+from namco_machine_collections
+union all
+select COLLECTIONID, MACHINEREF, NAME
+from namco_machine_collections_history),
+duplicates as (
+select collectionid, MACHINEREF, name, count(*)
+from cte
+group by all
+having count(*) > 1)
+select count(*) from duplicates;
+
+create table namco_machine_collections_clone clone namco_machine_collections;
+create table namco_machine_collections_history_clone clone namco_machine_collections_history;
+
+truncate table namco_machine_collections;
+
+insert into namco_machine_collections
+( SITECODE, SITENAME, REGION, INDEX, MACHINEREF, COLLECTIONID, COLLECTIONDATETIME, PREVIOUSCOLLECTIONDATETIME, COLLECTIONDAYS, COLLECTIONTYPE, CLASS, TYPE, GENERATESINCOME, NAME, MERGED_PK, MANUFACTURER, LOCATION, ZONE, GROSSCASH, REFILLS, HANDPAYS, ENGINEERSCREDITS, PROMOCASH, CASHLESSCARDIN, DEBITCARDIN, TICKETSIN, TICKETSOUT, NETCASH, RTP, VTP, WINS, CASHDIFFERENCE, NETEARNINGS, TAXTYPE, TAXRATE, TAXAMOUNT, NETLESSTAX, GROSSCASHBREAKDOWN_NOTES50, GROSSCASHBREAKDOWN_NOTES20, GROSSCASHBREAKDOWN_NOTES10, GROSSCASHBREAKDOWN_NOTES5, GROSSCASHBREAKDOWN_COINS200, GROSSCASHBREAKDOWN_COINS100, GROSSCASHBREAKDOWN_COINS50, GROSSCASHBREAKDOWN_COINS20, GROSSCASHBREAKDOWN_COINS10, GROSSCASHBREAKDOWN_COINS5, GROSSCASHBREAKDOWN_COINS2, GROSSCASHBREAKDOWN_COINS1, METERS, _ETLEAP_LOOKBACK_DATE)
+select SITECODE, SITENAME, REGION, "INDEX", MACHINEREF, COLLECTIONID, COLLECTIONDATETIME, PREVIOUSCOLLECTIONDATETIME, COLLECTIONDAYS, COLLECTIONTYPE, CLASS, "TYPE", GENERATESINCOME, NAME, CONCAT(collectionid, '_', machineref, '_', name, '_', index), MANUFACTURER, LOCATION, "ZONE", GROSSCASH, REFILLS, HANDPAYS, ENGINEERSCREDITS, PROMOCASH, CASHLESSCARDIN, DEBITCARDIN, TICKETSIN, TICKETSOUT, NETCASH, RTP, VTP, WINS, CASHDIFFERENCE, NETEARNINGS, TAXTYPE, TAXRATE, TAXAMOUNT, NETLESSTAX, GROSSCASHBREAKDOWN_NOTES50, GROSSCASHBREAKDOWN_NOTES20, GROSSCASHBREAKDOWN_NOTES10, GROSSCASHBREAKDOWN_NOTES5, GROSSCASHBREAKDOWN_COINS200, GROSSCASHBREAKDOWN_COINS100, GROSSCASHBREAKDOWN_COINS50, GROSSCASHBREAKDOWN_COINS20, GROSSCASHBREAKDOWN_COINS10, GROSSCASHBREAKDOWN_COINS5, GROSSCASHBREAKDOWN_COINS2, GROSSCASHBREAKDOWN_COINS1, METERS, _ETLEAP_LOOKBACK_DATE
+from namco_machine_collections_history
+order by collectiondatetime;
+
+truncate table crown_machine_collections;
+
+insert into crown_machine_collections
+( SITECODE, SITENAME, REGION, INDEX, MACHINEREF, COLLECTIONID, COLLECTIONDATETIME, PREVIOUSCOLLECTIONDATETIME, COLLECTIONDAYS, COLLECTIONTYPE, CLASS, TYPE, GENERATESINCOME, NAME, MERGED_PK, MANUFACTURER, LOCATION, ZONE, GROSSCASH, REFILLS, HANDPAYS, ENGINEERSCREDITS, PROMOCASH, CASHLESSCARDIN, DEBITCARDIN, TICKETSIN, TICKETSOUT, NETCASH, RTP, VTP, WINS, CASHDIFFERENCE, NETEARNINGS, TAXTYPE, TAXRATE, TAXAMOUNT, NETLESSTAX, GROSSCASHBREAKDOWN_NOTES50, GROSSCASHBREAKDOWN_NOTES20, GROSSCASHBREAKDOWN_NOTES10, GROSSCASHBREAKDOWN_NOTES5, GROSSCASHBREAKDOWN_COINS200, GROSSCASHBREAKDOWN_COINS100, GROSSCASHBREAKDOWN_COINS50, GROSSCASHBREAKDOWN_COINS20, GROSSCASHBREAKDOWN_COINS10, GROSSCASHBREAKDOWN_COINS5, GROSSCASHBREAKDOWN_COINS2, GROSSCASHBREAKDOWN_COINS1, METERS, _ETLEAP_LOOKBACK_DATE)
+select SITECODE, SITENAME, REGION, "INDEX", MACHINEREF, COLLECTIONID, COLLECTIONDATETIME, PREVIOUSCOLLECTIONDATETIME, COLLECTIONDAYS, COLLECTIONTYPE, CLASS, "TYPE", GENERATESINCOME, NAME, CONCAT(collectionid, '_', machineref, '_', name, '_', index), MANUFACTURER, LOCATION, "ZONE", GROSSCASH, REFILLS, HANDPAYS, ENGINEERSCREDITS, PROMOCASH, CASHLESSCARDIN, DEBITCARDIN, TICKETSIN, TICKETSOUT, NETCASH, RTP, VTP, WINS, CASHDIFFERENCE, NETEARNINGS, TAXTYPE, TAXRATE, TAXAMOUNT, NETLESSTAX, GROSSCASHBREAKDOWN_NOTES50, GROSSCASHBREAKDOWN_NOTES20, GROSSCASHBREAKDOWN_NOTES10, GROSSCASHBREAKDOWN_NOTES5, GROSSCASHBREAKDOWN_COINS200, GROSSCASHBREAKDOWN_COINS100, GROSSCASHBREAKDOWN_COINS50, GROSSCASHBREAKDOWN_COINS20, GROSSCASHBREAKDOWN_COINS10, GROSSCASHBREAKDOWN_COINS5, GROSSCASHBREAKDOWN_COINS2, GROSSCASHBREAKDOWN_COINS1, METERS, _ETLEAP_LOOKBACK_DATE
+from crown_machine_collections_history
+order by collectiondatetime;
+
+
+truncate table playnation_machine_collections;
+
+insert into playnation_machine_collections
+( SITECODE, SITENAME, REGION, INDEX, MACHINEREF, COLLECTIONID, COLLECTIONDATETIME, PREVIOUSCOLLECTIONDATETIME, COLLECTIONDAYS, COLLECTIONTYPE, CLASS, TYPE, GENERATESINCOME, NAME, MERGED_PK, MANUFACTURER, LOCATION, ZONE, GROSSCASH, REFILLS, HANDPAYS, ENGINEERSCREDITS, PROMOCASH, CASHLESSCARDIN, DEBITCARDIN, TICKETSIN, TICKETSOUT, NETCASH, RTP, VTP, WINS, CASHDIFFERENCE, NETEARNINGS, TAXTYPE, TAXRATE, TAXAMOUNT, NETLESSTAX, GROSSCASHBREAKDOWN_NOTES50, GROSSCASHBREAKDOWN_NOTES20, GROSSCASHBREAKDOWN_NOTES10, GROSSCASHBREAKDOWN_NOTES5, GROSSCASHBREAKDOWN_COINS200, GROSSCASHBREAKDOWN_COINS100, GROSSCASHBREAKDOWN_COINS50, GROSSCASHBREAKDOWN_COINS20, GROSSCASHBREAKDOWN_COINS10, GROSSCASHBREAKDOWN_COINS5, GROSSCASHBREAKDOWN_COINS2, GROSSCASHBREAKDOWN_COINS1, METERS, _ETLEAP_LOOKBACK_DATE)
+select SITECODE, SITENAME, REGION, "INDEX", MACHINEREF, COLLECTIONID, COLLECTIONDATETIME, PREVIOUSCOLLECTIONDATETIME, COLLECTIONDAYS, COLLECTIONTYPE, CLASS, "TYPE", GENERATESINCOME, NAME, CONCAT(collectionid, '_', machineref, '_', name, '_', index), MANUFACTURER, LOCATION, "ZONE", GROSSCASH, REFILLS, HANDPAYS, ENGINEERSCREDITS, PROMOCASH, CASHLESSCARDIN, DEBITCARDIN, TICKETSIN, TICKETSOUT, NETCASH, RTP, VTP, WINS, CASHDIFFERENCE, NETEARNINGS, TAXTYPE, TAXRATE, TAXAMOUNT, NETLESSTAX, GROSSCASHBREAKDOWN_NOTES50, GROSSCASHBREAKDOWN_NOTES20, GROSSCASHBREAKDOWN_NOTES10, GROSSCASHBREAKDOWN_NOTES5, GROSSCASHBREAKDOWN_COINS200, GROSSCASHBREAKDOWN_COINS100, GROSSCASHBREAKDOWN_COINS50, GROSSCASHBREAKDOWN_COINS20, GROSSCASHBREAKDOWN_COINS10, GROSSCASHBREAKDOWN_COINS5, GROSSCASHBREAKDOWN_COINS2, GROSSCASHBREAKDOWN_COINS1, METERS, _ETLEAP_LOOKBACK_DATE
+from playnation_machine_collections_history
+order by collectiondatetime;
+
+
+truncate table crown_machine_inventory_list;
+
+insert into crown_machine_inventory_list 
+( SITECODE, SITENAME, REGION, INDEX, MACHINEREF, MACHINENAME, MERGED_PK, CLASS, TYPE, GENERATESINCOME, POP, JACKPOT, LOCATION, ZONE, SERIALNUMBER, INSTALLATIONDATE, REMOVALDATE, COLLECTIONDAYSONSITE, _ETLEAP_LOOKBACK_DATE )
+SELECT SITECODE, SITENAME, REGION, "INDEX", MACHINEREF, MACHINENAME, CONCAT(MACHINEREF, '_', MACHINENAME, '_', index), CLASS, "TYPE", GENERATESINCOME, POP, JACKPOT, LOCATION, "ZONE", SERIALNUMBER, INSTALLATIONDATE, REMOVALDATE, COLLECTIONDAYSONSITE, _ETLEAP_LOOKBACK_DATE
+FROM HAVEN_RAW.PLAYSAFE.CROWN_MACHINE_INVENTORY_LIST_HISTORY
+order by _etleap_lookback_date;
+
+truncate table namco_machine_inventory_list;
+
+insert into namco_machine_inventory_list 
+( SITECODE, SITENAME, REGION, INDEX, MACHINEREF, MACHINENAME, MERGED_PK, CLASS, TYPE, GENERATESINCOME, POP, JACKPOT, LOCATION, ZONE, SERIALNUMBER, INSTALLATIONDATE, REMOVALDATE, COLLECTIONDAYSONSITE, _ETLEAP_LOOKBACK_DATE )
+SELECT SITECODE, SITENAME, REGION, "INDEX", MACHINEREF, MACHINENAME, CONCAT(MACHINEREF, '_', MACHINENAME, '_', index), CLASS, "TYPE", GENERATESINCOME, POP, JACKPOT, LOCATION, "ZONE", SERIALNUMBER, INSTALLATIONDATE, REMOVALDATE, COLLECTIONDAYSONSITE, _ETLEAP_LOOKBACK_DATE
+FROM HAVEN_RAW.PLAYSAFE.NAMCO_MACHINE_INVENTORY_LIST_HISTORY
+order by _etleap_lookback_date;
+
+truncate table playnation_machine_inventory_list;
+
+insert into playnation_machine_inventory_list 
+( SITECODE, SITENAME, REGION, INDEX, MACHINEREF, MACHINENAME, MERGED_PK, CLASS, TYPE, GENERATESINCOME, POP, JACKPOT, LOCATION, ZONE, SERIALNUMBER, INSTALLATIONDATE, REMOVALDATE, COLLECTIONDAYSONSITE, _ETLEAP_LOOKBACK_DATE )
+SELECT SITECODE, SITENAME, REGION, "INDEX", MACHINEREF, MACHINENAME, CONCAT(MACHINEREF, '_', MACHINENAME, '_', index), CLASS, "TYPE", GENERATESINCOME, POP, JACKPOT, LOCATION, "ZONE", SERIALNUMBER, INSTALLATIONDATE, REMOVALDATE, COLLECTIONDAYSONSITE, _ETLEAP_LOOKBACK_DATE
+FROM HAVEN_RAW.PLAYSAFE.playnation_MACHINE_INVENTORY_LIST_HISTORY
+order by _etleap_lookback_date;
+
+use role dba;
+
+use schema haven_base.playsafe;
+
+select * from crown_machine_collections limit 100;
+select * from crown_machine_inventory_list limit 100;
+
+select * from namco_machine_collections limit 100;
+select * from namco_machine_inventory_list limit 100;
+
+select * from playnation_machine_collections limit 100;
+select * from playnation_machine_inventory_list limit 100;
+
+
+
+
+select count(*) from namco_machine_collections;
+
+
+SELECT SITECODE, SITENAME, REGION, "INDEX", MACHINEREF, COLLECTIONID, COLLECTIONDATETIME, PREVIOUSCOLLECTIONDATETIME, COLLECTIONDAYS, COLLECTIONTYPE, CLASS, "TYPE", GENERATESINCOME, NAME, MERGED_PK, MANUFACTURER, LOCATION, "ZONE", GROSSCASH, REFILLS, HANDPAYS, ENGINEERSCREDITS, PROMOCASH, CASHLESSCARDIN, DEBITCARDIN, TICKETSIN, TICKETSOUT, NETCASH, RTP, VTP, WINS, CASHDIFFERENCE, NETEARNINGS, TAXTYPE, TAXRATE, TAXAMOUNT, NETLESSTAX, GROSSCASHBREAKDOWN_NOTES50, GROSSCASHBREAKDOWN_NOTES20, GROSSCASHBREAKDOWN_NOTES10, GROSSCASHBREAKDOWN_NOTES5, GROSSCASHBREAKDOWN_COINS200, GROSSCASHBREAKDOWN_COINS100, GROSSCASHBREAKDOWN_COINS50, GROSSCASHBREAKDOWN_COINS20, GROSSCASHBREAKDOWN_COINS10, GROSSCASHBREAKDOWN_COINS5, GROSSCASHBREAKDOWN_COINS2, GROSSCASHBREAKDOWN_COINS1, METERS, _ETLEAP_LOOKBACK_DATE
+FROM HAVEN_RAW.PLAYSAFE.CROWN_MACHINE_COLLECTIONS;
+
+
+SELECT SITECODE, SITENAME, REGION, "INDEX", MACHINEREF, COLLECTIONID, COLLECTIONDATETIME, PREVIOUSCOLLECTIONDATETIME, COLLECTIONDAYS, COLLECTIONTYPE, CLASS, "TYPE", GENERATESINCOME, NAME, MANUFACTURER, LOCATION, "ZONE", GROSSCASH, REFILLS, HANDPAYS, ENGINEERSCREDITS, PROMOCASH, CASHLESSCARDIN, DEBITCARDIN, TICKETSIN, TICKETSOUT, NETCASH, RTP, VTP, WINS, CASHDIFFERENCE, NETEARNINGS, TAXTYPE, TAXRATE, TAXAMOUNT, NETLESSTAX, GROSSCASHBREAKDOWN_NOTES50, GROSSCASHBREAKDOWN_NOTES20, GROSSCASHBREAKDOWN_NOTES10, GROSSCASHBREAKDOWN_NOTES5, GROSSCASHBREAKDOWN_COINS200, GROSSCASHBREAKDOWN_COINS100, GROSSCASHBREAKDOWN_COINS50, GROSSCASHBREAKDOWN_COINS20, GROSSCASHBREAKDOWN_COINS10, GROSSCASHBREAKDOWN_COINS5, GROSSCASHBREAKDOWN_COINS2, GROSSCASHBREAKDOWN_COINS1, METERS, _ETLEAP_LOOKBACK_DATE
+FROM HAVEN_RAW.PLAYSAFE.CROWN_MACHINE_COLLECTIONS_HISTORY;
+
+
+SELECT SITECODE, SITENAME, REGION, "INDEX", MACHINEREF, MACHINENAME, MERGED_PK, CLASS, "TYPE", GENERATESINCOME, POP, JACKPOT, LOCATION, "ZONE", SERIALNUMBER, INSTALLATIONDATE, REMOVALDATE, COLLECTIONDAYSONSITE, _ETLEAP_LOOKBACK_DATE
+FROM HAVEN_RAW.PLAYSAFE.CROWN_MACHINE_INVENTORY_LIST
+limit 20;
+
+SELECT SITECODE, SITENAME, REGION, "INDEX", MACHINEREF, MACHINENAME, CLASS, "TYPE", GENERATESINCOME, POP, JACKPOT, LOCATION, "ZONE", SERIALNUMBER, INSTALLATIONDATE, REMOVALDATE, COLLECTIONDAYSONSITE, _ETLEAP_LOOKBACK_DATE
+FROM HAVEN_RAW.PLAYSAFE.CROWN_MACHINE_INVENTORY_LIST_HISTORY;
+
+
+SELECT SITECODE, SITENAME, REGION, "INDEX", MACHINEREF, COLLECTIONID, COLLECTIONDATETIME, PREVIOUSCOLLECTIONDATETIME, COLLECTIONDAYS, COLLECTIONTYPE, CLASS, "TYPE", GENERATESINCOME, NAME, MERGED_PK, MANUFACTURER, LOCATION, "ZONE", GROSSCASH, REFILLS, HANDPAYS, ENGINEERSCREDITS, PROMOCASH, CASHLESSCARDIN, DEBITCARDIN, TICKETSIN, TICKETSOUT, NETCASH, RTP, VTP, WINS, CASHDIFFERENCE, NETEARNINGS, TAXTYPE, TAXRATE, TAXAMOUNT, NETLESSTAX, GROSSCASHBREAKDOWN_NOTES50, GROSSCASHBREAKDOWN_NOTES20, GROSSCASHBREAKDOWN_NOTES10, GROSSCASHBREAKDOWN_NOTES5, GROSSCASHBREAKDOWN_COINS200, GROSSCASHBREAKDOWN_COINS100, GROSSCASHBREAKDOWN_COINS50, GROSSCASHBREAKDOWN_COINS20, GROSSCASHBREAKDOWN_COINS10, GROSSCASHBREAKDOWN_COINS5, GROSSCASHBREAKDOWN_COINS2, GROSSCASHBREAKDOWN_COINS1, METERS, _ETLEAP_LOOKBACK_DATE
+FROM HAVEN_RAW.PLAYSAFE.NAMCO_MACHINE_COLLECTIONS;
+
+
+SELECT SITECODE, SITENAME, REGION, "INDEX", MACHINEREF, COLLECTIONID, COLLECTIONDATETIME, PREVIOUSCOLLECTIONDATETIME, COLLECTIONDAYS, COLLECTIONTYPE, CLASS, "TYPE", GENERATESINCOME, NAME, MANUFACTURER, LOCATION, "ZONE", GROSSCASH, REFILLS, HANDPAYS, ENGINEERSCREDITS, PROMOCASH, CASHLESSCARDIN, DEBITCARDIN, TICKETSIN, TICKETSOUT, NETCASH, RTP, VTP, WINS, CASHDIFFERENCE, NETEARNINGS, TAXTYPE, TAXRATE, TAXAMOUNT, NETLESSTAX, GROSSCASHBREAKDOWN_NOTES50, GROSSCASHBREAKDOWN_NOTES20, GROSSCASHBREAKDOWN_NOTES10, GROSSCASHBREAKDOWN_NOTES5, GROSSCASHBREAKDOWN_COINS200, GROSSCASHBREAKDOWN_COINS100, GROSSCASHBREAKDOWN_COINS50, GROSSCASHBREAKDOWN_COINS20, GROSSCASHBREAKDOWN_COINS10, GROSSCASHBREAKDOWN_COINS5, GROSSCASHBREAKDOWN_COINS2, GROSSCASHBREAKDOWN_COINS1, METERS, _ETLEAP_LOOKBACK_DATE
+FROM HAVEN_RAW.PLAYSAFE.NAMCO_MACHINE_COLLECTIONS_HISTORY;
+
+
+SELECT SITECODE, SITENAME, REGION, "INDEX", MACHINEREF, MACHINENAME, MERGED_PK, CLASS, "TYPE", GENERATESINCOME, POP, JACKPOT, LOCATION, "ZONE", SERIALNUMBER, INSTALLATIONDATE, REMOVALDATE, COLLECTIONDAYSONSITE, _ETLEAP_LOOKBACK_DATE
+FROM HAVEN_RAW.PLAYSAFE.NAMCO_MACHINE_INVENTORY_LIST;
+SELECT SITECODE, SITENAME, REGION, "INDEX", MACHINEREF, MACHINENAME, CLASS, "TYPE", GENERATESINCOME, POP, JACKPOT, LOCATION, "ZONE", SERIALNUMBER, INSTALLATIONDATE, REMOVALDATE, COLLECTIONDAYSONSITE, _ETLEAP_LOOKBACK_DATE
+FROM HAVEN_RAW.PLAYSAFE.NAMCO_MACHINE_INVENTORY_LIST_HISTORY;
+
+
+SELECT SITECODE, SITENAME, REGION, "INDEX", MACHINEREF, COLLECTIONID, COLLECTIONDATETIME, PREVIOUSCOLLECTIONDATETIME, COLLECTIONDAYS, COLLECTIONTYPE, CLASS, "TYPE", GENERATESINCOME, NAME, MERGED_PK, MANUFACTURER, LOCATION, "ZONE", GROSSCASH, REFILLS, HANDPAYS, ENGINEERSCREDITS, PROMOCASH, CASHLESSCARDIN, DEBITCARDIN, TICKETSIN, TICKETSOUT, NETCASH, RTP, VTP, WINS, CASHDIFFERENCE, NETEARNINGS, TAXTYPE, TAXRATE, TAXAMOUNT, NETLESSTAX, GROSSCASHBREAKDOWN_NOTES50, GROSSCASHBREAKDOWN_NOTES20, GROSSCASHBREAKDOWN_NOTES10, GROSSCASHBREAKDOWN_NOTES5, GROSSCASHBREAKDOWN_COINS200, GROSSCASHBREAKDOWN_COINS100, GROSSCASHBREAKDOWN_COINS50, GROSSCASHBREAKDOWN_COINS20, GROSSCASHBREAKDOWN_COINS10, GROSSCASHBREAKDOWN_COINS5, GROSSCASHBREAKDOWN_COINS2, GROSSCASHBREAKDOWN_COINS1, METERS, _ETLEAP_LOOKBACK_DATE
+FROM HAVEN_RAW.PLAYSAFE.PLAYNATION_MACHINE_COLLECTIONS;
+
+
+SELECT SITECODE, SITENAME, REGION, "INDEX", MACHINEREF, COLLECTIONID, COLLECTIONDATETIME, PREVIOUSCOLLECTIONDATETIME, COLLECTIONDAYS, COLLECTIONTYPE, CLASS, "TYPE", GENERATESINCOME, NAME, MANUFACTURER, LOCATION, "ZONE", GROSSCASH, REFILLS, HANDPAYS, ENGINEERSCREDITS, PROMOCASH, CASHLESSCARDIN, DEBITCARDIN, TICKETSIN, TICKETSOUT, NETCASH, RTP, VTP, WINS, CASHDIFFERENCE, NETEARNINGS, TAXTYPE, TAXRATE, TAXAMOUNT, NETLESSTAX, GROSSCASHBREAKDOWN_NOTES50, GROSSCASHBREAKDOWN_NOTES20, GROSSCASHBREAKDOWN_NOTES10, GROSSCASHBREAKDOWN_NOTES5, GROSSCASHBREAKDOWN_COINS200, GROSSCASHBREAKDOWN_COINS100, GROSSCASHBREAKDOWN_COINS50, GROSSCASHBREAKDOWN_COINS20, GROSSCASHBREAKDOWN_COINS10, GROSSCASHBREAKDOWN_COINS5, GROSSCASHBREAKDOWN_COINS2, GROSSCASHBREAKDOWN_COINS1, METERS, _ETLEAP_LOOKBACK_DATE
+FROM HAVEN_RAW.PLAYSAFE.PLAYNATION_MACHINE_COLLECTIONS_HISTORY;
+
+
+SELECT SITECODE, SITENAME, REGION, "INDEX", MACHINEREF, MACHINENAME, MERGED_PK, CLASS, "TYPE", GENERATESINCOME, POP, JACKPOT, LOCATION, "ZONE", SERIALNUMBER, INSTALLATIONDATE, REMOVALDATE, COLLECTIONDAYSONSITE, _ETLEAP_LOOKBACK_DATE
+FROM HAVEN_RAW.PLAYSAFE.PLAYNATION_MACHINE_INVENTORY_LIST;
+SELECT SITECODE, SITENAME, REGION, "INDEX", MACHINEREF, MACHINENAME, CLASS, "TYPE", GENERATESINCOME, POP, JACKPOT, LOCATION, "ZONE", SERIALNUMBER, INSTALLATIONDATE, REMOVALDATE, COLLECTIONDAYSONSITE, _ETLEAP_LOOKBACK_DATE
+FROM HAVEN_RAW.PLAYSAFE.PLAYNATION_MACHINE_INVENTORY_LIST_HISTORY;
+
+
+-- 14/11/2025
+
+-- load historic data
+
+
+
+use role haven_etleap_dataload;
+
+use schema haven_raw.playsafe;
+
+copy into crown_machine_collections_history 
+from @%crown_machine_collections_history
+file_format = playsafe_data_load_file_format
+--validation_mode = return_errors
+;
+
+copy into namco_machine_collections_history 
+from @%namco_machine_collections_history
+file_format = playsafe_data_load_file_format
+--validation_mode = return_errors
+;
+
+copy into playnation_machine_collections_history 
+from @%playnation_machine_collections_history
+file_format = playsafe_data_load_file_format
+--validation_mode = return_errors
+;
+
+copy into crown_machine_inventory_list_history 
+from @%crown_machine_inventory_list_history
+file_format = playsafe_data_load_file_format
+--validation_mode = return_errors
+;
+
+copy into namco_machine_inventory_list_history 
+from @%namco_machine_inventory_list_history
+file_format = playsafe_data_load_file_format
+--validation_mode = return_errors
+;
+
+copy into playnation_machine_inventory_list_history 
+from @%playnation_machine_inventory_list_history
+file_format = playsafe_data_load_file_format
+--validation_mode = return_errors
+;
+
+
+
+desc table playnation_machine_collections;
+
+select * from playnation_machine_inventory_list limit 100;
+
+select * from playnation_machine_collections limit 100;
+
+-- 21/10/2025
+
+use role haven_etleap_dataload;;
+
+use schema haven_raw.playsafe;
+
+desc table crown_machine_collections;
+
+use role dba;
+
+use schema haven_base.playsafe;
+
+show views;
+
+select * from crown_machine_collections limit 20;
+
+with cte as 
+(select collectionid as collectionid
+from crown_machine_collections
+group by 1 
+having count(*) > 1)
+select b.collectionid, date(b.collectiondatetime), count(*)
+from crown_machine_collections b
+join cte a
+on a.collectionid = b.collectionid
+group by 1,2
+order by 2,1
+;
+
+with cte as 
+(select collectionid as collectionid
+from namco_machine_collections
+group by 1 
+having count(*) > 1)
+select b.collectionid, date(b.collectiondatetime), count(*)
+from namco_machine_collections b
+join cte a
+on a.collectionid = b.collectionid
+group by 1,2
+order by 2,1
+;
+
+use schema haven_raw.playsafe;
+
+with cte as 
+(select collectionid as collectionid
+from namco_machine_collections_history
+group by 1 
+having count(*) > 1)
+select b.*
+from namco_machine_collections_history b
+  join cte a
+  on a.collectionid = b.collectionid
+  order by collectionid, collectiondatetime
+--  and _ETLEAP_LOOKBACK_DATE != '2025-09-05'
+  ;
+
+  select *  
+  from namco_machine_collections
+  where "_etleap_lookback_date"  != '2025-09-05';
+
+desc table namco_machine_collections;
+
+select min(_etleap_lookback_date), max(_etleap_lookback_date)
+from namco_machine_collections_history;
+  
+select * from haven_raw.playsafe.namco_machine_collections
+where collectionid = 'C0230BALL000657960';
+
+select * from haven_raw.playsafe.namco_machine_collections
+where date(collectiondatetime) between '2025-01-01' and '2025-02-01';
+
+
+
+select get_ddl('view', 'crown_machine_collections');
+
+-- C03302655000046285
+
+select *
+from crown_machine_collections
+where collectionid = 'C03302655000046285';
+
+-- Bulding environment
+
+use role haven_etleap_dataload;;
+
+use schema haven_raw.playsafe;
+
+copy into machine_collections_stage from @%machine_collections_stage;
+
+select * from machine_collections_stage limit 100;
+
+select * from machine_collections limit 100;
+
+insert into machine_collections select * from machine_collections_stage
+order by machine_collectiondatetime, sitecode, sitename, index;
+
+SELECT SITECODE, SITENAME, REGION, MACHINE_COLLECTIONID, MACHINE_COLLECTIONDATETIME, MACHINE_PREVIOUSCOLLECTIONDATETIME, MACHINE_COLLECTIONDAYS, MACHINE_COLLECTIONTYPE, MACHINE_CLASS, MACHINE_TYPE, MACHINE_NAME, MACHINE_MANUFACTURER, MACHINE_LOCATION, MACHINE_ZONE, MACHINE_GROSSCASH, MACHINE_REFILLS, MACHINE_HANDPAYS, MACHINE_ENGINEERSCREDITS, MACHINE_PROMOCASH, MACHINE_CASHLESSCARDIN, MACHINE_DEBITCARDIN, MACHINE_TICKETSIN, MACHINE_TICKETSOUT, MACHINE_NETCASH, MACHINE_RTP, MACHINE_VTP, MACHINE_WINS, MACHINE_CASHDIFFERANCE, MACHINE_NETEARNINGS, MACHINE_TAXTYPE, MACHINE_TAXRATE, MACHINE_TAXAMOUNT, MACHINE_NETLESSTAX, MACHINE_GROSSCASHBREAKDOWN_NOTES50, MACHINE_GROSSCASHBREAKDOWN_NOTES20, MACHINE_GROSSCASHBREAKDOWN_NOTES10, MACHINE_GROSSCASHBREAKDOWN_NOTES5, MACHINE_GROSSCASHBREAKDOWN_COINS200, MACHINE_GROSSCASHBREAKDOWN_COINS100, MACHINE_GROSSCASHBREAKDOWN_COINS50, MACHINE_GROSSCASHBREAKDOWN_COINS20, MACHINE_GROSSCASHBREAKDOWN_COINS10, MACHINE_GROSSCASHBREAKDOWN_COINS5, MACHINE_GROSSCASHBREAKDOWN_COINS2, MACHINE_GROSSCASHBREAKDOWN_COINS1, MACHINE_METERS, _ETLEAP_LOOKBACK_DATE
+FROM (
+SELECT SITECODE, SITENAME, REGION, MACHINE_COLLECTIONID, MACHINE_COLLECTIONDATETIME, MACHINE_PREVIOUSCOLLECTIONDATETIME, MACHINE_COLLECTIONDAYS, MACHINE_COLLECTIONTYPE, MACHINE_CLASS, MACHINE_TYPE, MACHINE_NAME, MACHINE_MANUFACTURER, MACHINE_LOCATION, MACHINE_ZONE, MACHINE_GROSSCASH, MACHINE_REFILLS, MACHINE_HANDPAYS, MACHINE_ENGINEERSCREDITS, MACHINE_PROMOCASH, MACHINE_CASHLESSCARDIN, MACHINE_DEBITCARDIN, MACHINE_TICKETSIN, MACHINE_TICKETSOUT, MACHINE_NETCASH, MACHINE_RTP, MACHINE_VTP, MACHINE_WINS, MACHINE_CASHDIFFERANCE, MACHINE_NETEARNINGS, MACHINE_TAXTYPE, MACHINE_TAXRATE, MACHINE_TAXAMOUNT, MACHINE_NETLESSTAX, MACHINE_GROSSCASHBREAKDOWN_NOTES50, MACHINE_GROSSCASHBREAKDOWN_NOTES20, MACHINE_GROSSCASHBREAKDOWN_NOTES10, MACHINE_GROSSCASHBREAKDOWN_NOTES5, MACHINE_GROSSCASHBREAKDOWN_COINS200, MACHINE_GROSSCASHBREAKDOWN_COINS100, MACHINE_GROSSCASHBREAKDOWN_COINS50, MACHINE_GROSSCASHBREAKDOWN_COINS20, MACHINE_GROSSCASHBREAKDOWN_COINS10, MACHINE_GROSSCASHBREAKDOWN_COINS5, MACHINE_GROSSCASHBREAKDOWN_COINS2, MACHINE_GROSSCASHBREAKDOWN_COINS1, MACHINE_METERS, _ETLEAP_LOOKBACK_DATE
+FROM MACHINE_COLLECTIONS
+union all 
+SELECT SITECODE, SITENAME, REGION, MACHINE_COLLECTIONID, MACHINE_COLLECTIONDATETIME, MACHINE_PREVIOUSCOLLECTIONDATETIME, MACHINE_COLLECTIONDAYS, MACHINE_COLLECTIONTYPE, MACHINE_CLASS, MACHINE_TYPE, MACHINE_NAME, MACHINE_MANUFACTURER, MACHINE_LOCATION, MACHINE_ZONE, MACHINE_GROSSCASH, MACHINE_REFILLS, MACHINE_HANDPAYS, MACHINE_ENGINEERSCREDITS, MACHINE_PROMOCASH, MACHINE_CASHLESSCARDIN, MACHINE_DEBITCARDIN, MACHINE_TICKETSIN, MACHINE_TICKETSOUT, MACHINE_NETCASH, MACHINE_RTP, MACHINE_VTP, MACHINE_WINS, MACHINE_CASHDIFFERANCE, MACHINE_NETEARNINGS, MACHINE_TAXTYPE, MACHINE_TAXRATE, MACHINE_TAXAMOUNT, MACHINE_NETLESSTAX, MACHINE_GROSSCASHBREAKDOWN_NOTES50, MACHINE_GROSSCASHBREAKDOWN_NOTES20, MACHINE_GROSSCASHBREAKDOWN_NOTES10, MACHINE_GROSSCASHBREAKDOWN_NOTES5, MACHINE_GROSSCASHBREAKDOWN_COINS200, MACHINE_GROSSCASHBREAKDOWN_COINS100, MACHINE_GROSSCASHBREAKDOWN_COINS50, MACHINE_GROSSCASHBREAKDOWN_COINS20, MACHINE_GROSSCASHBREAKDOWN_COINS10, MACHINE_GROSSCASHBREAKDOWN_COINS5, MACHINE_GROSSCASHBREAKDOWN_COINS2, MACHINE_GROSSCASHBREAKDOWN_COINS1, MACHINE_METERS, _ETLEAP_LOOKBACK_DATE
+FROM MACHINE_COLLECTIONS)
+group by SITECODE, SITENAME, REGION, MACHINE_COLLECTIONID, MACHINE_COLLECTIONDATETIME, MACHINE_PREVIOUSCOLLECTIONDATETIME, MACHINE_COLLECTIONDAYS, MACHINE_COLLECTIONTYPE, MACHINE_CLASS, MACHINE_TYPE, MACHINE_NAME, MACHINE_MANUFACTURER, MACHINE_LOCATION, MACHINE_ZONE, MACHINE_GROSSCASH, MACHINE_REFILLS, MACHINE_HANDPAYS, MACHINE_ENGINEERSCREDITS, MACHINE_PROMOCASH, MACHINE_CASHLESSCARDIN, MACHINE_DEBITCARDIN, MACHINE_TICKETSIN, MACHINE_TICKETSOUT, MACHINE_NETCASH, MACHINE_RTP, MACHINE_VTP, MACHINE_WINS, MACHINE_CASHDIFFERANCE, MACHINE_NETEARNINGS, MACHINE_TAXTYPE, MACHINE_TAXRATE, MACHINE_TAXAMOUNT, MACHINE_NETLESSTAX, MACHINE_GROSSCASHBREAKDOWN_NOTES50, MACHINE_GROSSCASHBREAKDOWN_NOTES20, MACHINE_GROSSCASHBREAKDOWN_NOTES10, MACHINE_GROSSCASHBREAKDOWN_NOTES5, MACHINE_GROSSCASHBREAKDOWN_COINS200, MACHINE_GROSSCASHBREAKDOWN_COINS100, MACHINE_GROSSCASHBREAKDOWN_COINS50, MACHINE_GROSSCASHBREAKDOWN_COINS20, MACHINE_GROSSCASHBREAKDOWN_COINS10, MACHINE_GROSSCASHBREAKDOWN_COINS5, MACHINE_GROSSCASHBREAKDOWN_COINS2, MACHINE_GROSSCASHBREAKDOWN_COINS1, MACHINE_METERS, _ETLEAP_LOOKBACK_DATE
+having count(*) > 1
+order by 1;
+
+
+use role dba;
+select * from machine_collections_stage
+where machine_collectiondatetime = '2025-03-10T13:10:38.333'
+order by sitecode;
+
+
+-- 04/06/2025
+
+use role haven_etleap_dataload;;
+
+use schema haven_raw.playsafe;
+
+create file format playsafe_data_load_file_format
+type = csv
+record_delimiter = '\n'
+field_delimiter = ','
+field_optionally_enclosed_by = '"'
+compression = gzip;
+
+truncate table crown_machine_collections_history;
+
+ls @%crown_machine_collections_history;
+
+copy into crown_machine_collections_history 
+from @%crown_machine_collections_history
+file_format = playsafe_data_load_file_format;
+
+select * from crown_machine_collections_history;
+
+;
+
+ls @%crown_machine_collections_history;
+
+-- 05-06-2025
+use role haven_etleap_dataload;
+use schema haven_raw.playsafe;
+
+show tables;
+
+drop table CROWN_MACHINE_COLLECTIONS_HISTORY;
+drop table NAMCO_MACHINE_COLLECTIONS_HISTORY;
+
+create table CROWN_MACHINE_COLLECTIONS_HISTORY
+like CROWN_MACHINE_COLLECTIONS;
+
+create table NAMCO_MACHINE_COLLECTIONS_HISTORY
+like NAMCO_MACHINE_COLLECTIONS;
+
+ls @%crown_machine_collections_history;
+
+copy into crown_machine_collections_history 
+from @%crown_machine_collections_history
+file_format = playsafe_data_load_file_format;
+
+ls @%namco_machine_collections_history;
+
+copy into namco_machine_collections_history 
+from @%namco_machine_collections_history
+file_format = playsafe_data_load_file_format;
+
+ls @%namco_machine_inventory_list_history;
+
+create or replace file format playsafe_data_load_file_format
+type = csv
+record_delimiter = '\n'
+field_delimiter = ','
+field_optionally_enclosed_by = '"'
+compression = gzip
+null_if = ('None');
+
+copy into namco_machine_inventory_list_history 
+from @%namco_machine_inventory_list_history
+file_format = playsafe_data_load_file_format;
+
+desc table namco_machine_inventory_list_history;
+
+select * from namco_machine_collections_history 
+where sitecode = 'BHOP'
+order by machine_collectiondatetime, index 
+;
+
+show tables;
+
+create table NAMCO_MACHINE_COLLECTIONS_20250330_20250426
+like NAMCO_MACHINE_COLLECTIONS_HISTORY;
+
+copy into NAMCO_MACHINE_COLLECTIONS_20250330_20250426 
+from @%NAMCO_MACHINE_COLLECTIONS_20250330_20250426
+file_format = playsafe_data_load_file_format;
+
+
+create table NAMCO_MACHINE_COLLECTIONS_20250316_20250419
+like NAMCO_MACHINE_COLLECTIONS_HISTORY;
+
+copy into NAMCO_MACHINE_COLLECTIONS_20250316_20250419 
+from @%NAMCO_MACHINE_COLLECTIONS_20250316_20250419
+file_format = playsafe_data_load_file_format;
+
+-- 16/06/2025
+
+show tables;
+
+ls @%CROWN_MACHINE_COLL§ECTIONS_HISTORY;
+
+ls @%NAMCO_MACHINE_COLLECTIONS_HISTORY;
+
+ls @%PLAYNATION_MACHINE_COLLECTIONS_HISTORY;
+
+ls @%CROWN_MACHINE_INVENTORY_LIST_HISTORY;
+
+ls @%NAMCO_MACHINE_INVENTORY_LIST_HISTORY;
+
+ls @%PLAYNATION_MACHINE_INVENTORY_LIST_HISTORY;
+
+rm @%CROWN_MACHINE_COLLECTIONS_HISTORY/;
+
+rm @%NAMCO_MACHINE_COLLECTIONS_HISTORY/;
+
+rm @%NAMCO_MACHINE_INVENTORY_LIST_HISTORY/;
+
+truncate table crown_machine_collections_history;
+
+copy into crown_machine_collections_history 
+from @%crown_machine_collections_history
+file_format = playsafe_data_load_file_format;
+
+truncate table namco_machine_collections_history;
+
+copy into namco_machine_collections_history 
+from @%namco_machine_collections_history
+file_format = playsafe_data_load_file_format;
+
+truncate table namco_machine_inventory_list_history;
+
+copy into namco_machine_inventory_list_history 
+from @%namco_machine_inventory_list_history
+file_format = playsafe_data_load_file_format;
+
+create table playnation_machine_collections_history like namco_machine_collections_history;
+create table playnation_machine_inventory_list_history like namco_machine_inventory_list_history;
+create table crown_machine_inventory_list_history like namco_machine_inventory_list_history;
+
+copy into playnation_machine_collections_history 
+from @%playnation_machine_collections_history
+file_format = playsafe_data_load_file_format;
+
+copy into playnation_machine_inventory_list_history 
+from @%playnation_machine_inventory_list_history
+file_format = playsafe_data_load_file_format;
+
+copy into crown_machine_inventory_list_history 
+from @%crown_machine_inventory_list_history
+file_format = playsafe_data_load_file_format;
+
+desc table crown_machine_inventory_list_history;
+
+alter table playnation_machine_inventory_list_history
+modify column MACHINE_MACHINEREF set data type  varchar();
+
+
+select get_ddl('table', 'playnation_machine_inventory_list_history');
+
+
+create or replace TABLE PLAYNATION_MACHINE_INVENTORY_LIST_HISTORY (
+	SITECODE VARCHAR(16777216) NOT NULL,
+	SITENAME VARCHAR(16777216),
+	REGION VARCHAR(16777216),
+	INDEX NUMBER(38,0),
+	MACHINE_MACHINEREF VARCHAR(16777216),
+	MACHINE_MACHINENAME VARCHAR(16777216),
+	MACHINE_CLASS VARCHAR(16777216),
+	MACHINE_TYPE VARCHAR(16777216),
+	MACHINE_POP VARCHAR(16777216),
+	MACHINE_JACKPOT VARCHAR(16777216),
+	MACHINE_LOCATION NUMBER(38,0),
+	MACHINE_ZONE VARCHAR(16777216),
+	MACHINE_SERIALNUMBER VARCHAR(16777216),
+	MACHINE_INSTALLATIONDATE VARCHAR(16777216),
+	MACHINE_REMOVALDATE VARCHAR(16777216),
+	MACHINE_COLLECTIONDAYSONSITE NUMBER(38,0),
+	_ETLEAP_LOOKBACK_DATE DATE NOT NULL,
+	primary key (SITECODE, _ETLEAP_LOOKBACK_DATE)
+);
+
+
+create or replace TABLE CROWN_MACHINE_INVENTORY_LIST_HISTORY (
+	SITECODE VARCHAR(16777216) NOT NULL,
+	SITENAME VARCHAR(16777216),
+	REGION VARCHAR(16777216),
+	INDEX NUMBER(38,0),
+	MACHINE_MACHINEREF VARCHAR(16777216),
+	MACHINE_MACHINENAME VARCHAR(16777216),
+	MACHINE_CLASS VARCHAR(16777216),
+	MACHINE_TYPE VARCHAR(16777216),
+	MACHINE_POP VARCHAR(16777216),
+	MACHINE_JACKPOT VARCHAR(16777216),
+	MACHINE_LOCATION NUMBER(38,0),
+	MACHINE_ZONE VARCHAR(16777216),
+	MACHINE_SERIALNUMBER VARCHAR(16777216),
+	MACHINE_INSTALLATIONDATE VARCHAR(16777216),
+	MACHINE_REMOVALDATE VARCHAR(16777216),
+	MACHINE_COLLECTIONDAYSONSITE NUMBER(38,0),
+	_ETLEAP_LOOKBACK_DATE DATE NOT NULL,
+	primary key (SITECODE, _ETLEAP_LOOKBACK_DATE)
+);
+
+
+-- 27/06/2025
+
+show tables;
+
+use role haven_etleap_dataload;
+
+use warehouse haven_cdc_migration_wh;
+
+create table namco_machine_collections_history like crown_machine_collections_history;
+
+ls @namco_machine_collections_history;
+
+truncate table namco_machine_collections_history;
+
+copy into namco_machine_collections_history 
+from @%namco_machine_collections_history
+file_format = playsafe_data_load_file_format;
+
+
+use role dba;
+
+use schema haven_base.playsafe;
+
+show tables;
+
+show views;
+
+select get_ddl('view', 'NAMCO_MACHINE_COLLECTIONS_HISTORY');
+
+select * from NAMCO_MACHINE_COLLECTIONS_HISTORY limit 230;
+
+
+select * from HAVEN_RAW.PLAYSAFE.NAMCO_MACHINE_COLLECTIONS_HISTORY limit 20;
+
+use schema HAVEN_RAW.PLAYSAFE;
+
+show tables;
+
+use role haven_etleap_dataload;
+
+show tables;
+
+ls @%NAMCO_MACHINE_COLLECTIONS_HISTORY;
+
+use warehouse haven_cdc_migration_wh;
+
+rm @%NAMCO_MACHINE_COLLECTIONS_HISTORY;
+
+create table NAMCO_MACHINE_COLLECTIONS_HISTORY_clone clone NAMCO_MACHINE_COLLECTIONS_HISTORY;
+
+ls @%NAMCO_MACHINE_COLLECTIONS_HISTORY;
+
+truncate table NAMCO_MACHINE_COLLECTIONS_HISTORY;
+
+select count(*) from NAMCO_MACHINE_COLLECTIONS_HISTORY;
+
+copy into namco_machine_collections_history 
+use role dba;
+
+use schema haven_raw.playsafe;
+
+show tables;
+
+select * from crown_machine_collections_history 
+where machine_collectionid = 'C00822131000069671'
+limit 20;
+
+select machine_collectionid, machine_collectiondatetime, machine_ticketsin
+from crown_machine_collections_history 
+where machine_ticketsin != 0
+order by machine_collectiondatetime;
+
+select max(_etleap_lookback_date) from namco_machine_collections_history limit 50;
+
+select count(*) from NAMCO_MACHINE_COLLECTIONS_HISTORY_clone;
+
+select * from NAMCO_MACHINE_COLLECTIONS_HISTORY 
+where sitename = 'BOURNE LITTLESEA' 
+and  machine_collectiondatetime > '2025-01-01'
+limit 50;
+
+select distinct(sitename) from namco_machine_collections_history;
+
+select sitecode, sitename, machine_collectionid, count(*)
+from namco_machine_collections_history
+group by 1, 2, 3
+having count(*) > 1;
+
+
+select * from namco_machine_collections_history
+where machine_collectionid = 'C0330BLIT000023131';
+
+-- 22/07/2025
+
+alter table crown_machine_collections_history rename to crown_machine_collections_history_pre_machineRef;
+
+drop table crown_machine_collections_history;
+
+create table crown_machine_collections_history like crown_machine_collections;
+
+desc table crown_machine_collections_history;
+
+copy into crown_machine_collections_history 
+from @%crown_machine_collections_history
+file_format = playsafe_data_load_file_format
+validation_mode = return_errors;
+
+copy into crown_machine_collections_history 
+from @%crown_machine_collections_history
+file_format = playsafe_data_load_file_format
+;
+
+ls @%crown_machine_collections_history;
+
+select * from crown_machine_collections_history limit 50;
+
+-- 04/09/2025
+
+use role dba;
+
+use schema haven_raw.playsafe;
+
+desc table crown_machine_collections;
+
+use role haven_etleap_dataload;
+
+alter table crown_machine_collections rename to crown_machine_collections_pre_generatesincome;
+alter table crown_machine_inventory_list rename to crown_machine_inventory_list_pre_generatesincome;
+
+alter table namco_machine_collections rename to namco_machine_collections_pre_generatesincome;
+alter table namco_machine_inventory_list rename to namco_machine_inventory_list_pre_generatesincome;
+
+alter table playnation_machine_collections rename to playnation_machine_collections_pre_generatesincome;
+alter table playnation_machine_inventory_list rename to playnation_machine_inventory_list_pre_generatesincome;
+
+alter table crown_machine_collections_history rename to crown_machine_collections_history_pre_generatesincome;
+alter table crown_machine_inventory_list_history rename to crown_machine_inventory_list_history_pre_generatesincome;
+
+alter table namco_machine_collections_history rename to namco_machine_collections_history_pre_generatesincome;
+alter table namco_machine_inventory_list_history rename to namco_machine_inventory_list_history_pre_generatesincome;
+
+alter table playnation_machine_collections_history rename to playnation_machine_collections_history_pre_generatesincome;
+alter table playnation_machine_inventory_list_history rename to playnation_machine_inventory_list_history_pre_generatesincome;
+
+show tables;
+
+desc table CROWN_MACHINE_COLLECTIONS;
+desc table NAMCO_MACHINE_COLLECTIONS;
+desc table PLAYNATION_MACHINE_COLLECTIONS;
+
+desc table crown_machine_inventory_list;
+desc table namco_machine_inventory_list;
+desc table playnation_machine_inventory_list;
+
+copy into crown_machine_collections_history 
+from @%crown_machine_collections_history
+file_format = playsafe_data_load_file_format
+--validation_mode = return_errors
+;
+
+copy into namco_machine_collections_history 
+from @%namco_machine_collections_history
+file_format = playsafe_data_load_file_format
+--validation_mode = return_errors
+;
+
+copy into playnation_machine_collections_history 
+from @%playnation_machine_collections_history
+file_format = playsafe_data_load_file_format
+--validation_mode = return_errors
+;
+
+copy into crown_machine_inventory_list_history 
+from @%crown_machine_inventory_list_history
+file_format = playsafe_data_load_file_format
+--validation_mode = return_errors
+;
+
+copy into namco_machine_inventory_list_history 
+from @%namco_machine_inventory_list_history
+file_format = playsafe_data_load_file_format
+--validation_mode = return_errors
+;
+
+copy into playnation_machine_inventory_list_history 
+from @%playnation_machine_inventory_list_history
+file_format = playsafe_data_load_file_format
+validation_mode = return_errors
+;
+
+create or replace file format playsafe_data_load_file_format
+type = csv
+record_delimiter = '\n'
+field_delimiter = ','
+field_optionally_enclosed_by = '"'
+compression = gzip
+null_if = ('None');
+
+DESC FILE FORMAT PLAYSAFE_DATA_LOAD_FILE_FORMAT;
+
+copy into playnation_machine_inventory_list_history 
+from @%playnation_machine_inventory_list_history
+file_format = playsafe_data_load_file_format
+validation_mode = return_errors
+;
+
+
+copy into crown_machine_inventory_list_history 
+from @%crown_machine_inventory_list_history
+file_format = playsafe_data_load_file_format
+validation_mode = return_errors
+;
+
+DESC TABLE PLAYNATION_MACHINE_INVENTORY_LIST_HISTORY;
+ALTER TABLE PLAYNATION_MACHINE_INVENTORY_LIST_HISTORY ALTER COLUMN MACHINEREF VARCHAR(40);
+
+desc table crown_machine_inventory_list_history;
+
+-- 05/09/2025
+
+use role haven_etleap_dataload;
+
+drop table namco_machine_collections_history;
+drop table namco_machine_inventory_list_history;
+drop table playnation_machine_collections_history;
+drop table playnation_machine_inventory_list_history;
+
+create table namco_machine_collections_history like namco_machine_collections;
+create table namco_machine_inventory_list_history like namco_machine_inventory_list;
+create table playnation_machine_collections_history like playnation_machine_collections;
+create table playnation_machine_inventory_list_history like playnation_machine_inventory_list;
+
+copy into namco_machine_collections_history 
+from @%namco_machine_collections_history
+file_format = playsafe_data_load_file_format
+--validation_mode = return_errors
+;
+
+copy into playnation_machine_collections_history 
+from @%playnation_machine_collections_history
+file_format = playsafe_data_load_file_format
+--validation_mode = return_errors
+;
+
+copy into namco_machine_inventory_list_history 
+from @%namco_machine_inventory_list_history
+file_format = playsafe_data_load_file_format
+--validation_mode = return_errors
+;
+
+copy into playnation_machine_inventory_list_history 
+from @%playnation_machine_inventory_list_history
+file_format = playsafe_data_load_file_format
+--validation_mode = return_errors
+;
+
+
+with cte as (select SITECODE, SITENAME, REGION, MACHINEREF, COLLECTIONID, COLLECTIONDATETIME, PREVIOUSCOLLECTIONDATETIME, COLLECTIONDAYS, COLLECTIONTYPE, CLASS, "TYPE", GENERATESINCOME, NAME, MANUFACTURER, LOCATION, "ZONE", GROSSCASH, REFILLS, HANDPAYS, ENGINEERSCREDITS, PROMOCASH, CASHLESSCARDIN, DEBITCARDIN, TICKETSIN, TICKETSOUT, NETCASH, RTP, VTP, WINS, CASHDIFFERENCE, NETEARNINGS, TAXTYPE, TAXRATE, TAXAMOUNT, NETLESSTAX, GROSSCASHBREAKDOWN_NOTES50, GROSSCASHBREAKDOWN_NOTES20, GROSSCASHBREAKDOWN_NOTES10, GROSSCASHBREAKDOWN_NOTES5, GROSSCASHBREAKDOWN_COINS200, GROSSCASHBREAKDOWN_COINS100, GROSSCASHBREAKDOWN_COINS50, GROSSCASHBREAKDOWN_COINS20, GROSSCASHBREAKDOWN_COINS10, GROSSCASHBREAKDOWN_COINS5, GROSSCASHBREAKDOWN_COINS2, GROSSCASHBREAKDOWN_COINS1 from namco_machine_collections
+union all
+select SITECODE, SITENAME, REGION, MACHINEREF, COLLECTIONID, COLLECTIONDATETIME, PREVIOUSCOLLECTIONDATETIME, COLLECTIONDAYS, COLLECTIONTYPE, CLASS, "TYPE", GENERATESINCOME, NAME, MANUFACTURER, LOCATION, "ZONE", GROSSCASH, REFILLS, HANDPAYS, ENGINEERSCREDITS, PROMOCASH, CASHLESSCARDIN, DEBITCARDIN, TICKETSIN, TICKETSOUT, NETCASH, RTP, VTP, WINS, CASHDIFFERENCE, NETEARNINGS, TAXTYPE, TAXRATE, TAXAMOUNT, NETLESSTAX, GROSSCASHBREAKDOWN_NOTES50, GROSSCASHBREAKDOWN_NOTES20, GROSSCASHBREAKDOWN_NOTES10, GROSSCASHBREAKDOWN_NOTES5, GROSSCASHBREAKDOWN_COINS200, GROSSCASHBREAKDOWN_COINS100, GROSSCASHBREAKDOWN_COINS50, GROSSCASHBREAKDOWN_COINS20, GROSSCASHBREAKDOWN_COINS10, GROSSCASHBREAKDOWN_COINS5, GROSSCASHBREAKDOWN_COINS2, GROSSCASHBREAKDOWN_COINS1 from namco_machine_collections_history)
+SELECT SITECODE, SITENAME, REGION, MACHINEREF, COLLECTIONID, COLLECTIONDATETIME, PREVIOUSCOLLECTIONDATETIME, COLLECTIONDAYS, COLLECTIONTYPE, CLASS, "TYPE", GENERATESINCOME, NAME, MANUFACTURER, LOCATION, "ZONE", GROSSCASH, REFILLS, HANDPAYS, ENGINEERSCREDITS, PROMOCASH, CASHLESSCARDIN, DEBITCARDIN, TICKETSIN, TICKETSOUT, NETCASH, RTP, VTP, WINS, CASHDIFFERENCE, NETEARNINGS, TAXTYPE, TAXRATE, TAXAMOUNT, NETLESSTAX, GROSSCASHBREAKDOWN_NOTES50, GROSSCASHBREAKDOWN_NOTES20, GROSSCASHBREAKDOWN_NOTES10, GROSSCASHBREAKDOWN_NOTES5, GROSSCASHBREAKDOWN_COINS200, GROSSCASHBREAKDOWN_COINS100, GROSSCASHBREAKDOWN_COINS50, GROSSCASHBREAKDOWN_COINS20, GROSSCASHBREAKDOWN_COINS10, GROSSCASHBREAKDOWN_COINS5, GROSSCASHBREAKDOWN_COINS2, GROSSCASHBREAKDOWN_COINS1
+FROM CTE
+group by SITECODE, SITENAME, REGION, MACHINEREF, COLLECTIONID, COLLECTIONDATETIME, PREVIOUSCOLLECTIONDATETIME, COLLECTIONDAYS, COLLECTIONTYPE, CLASS, "TYPE", GENERATESINCOME, NAME, MANUFACTURER, LOCATION, "ZONE", GROSSCASH, REFILLS, HANDPAYS, ENGINEERSCREDITS, PROMOCASH, CASHLESSCARDIN, DEBITCARDIN, TICKETSIN, TICKETSOUT, NETCASH, RTP, VTP, WINS, CASHDIFFERENCE, NETEARNINGS, TAXTYPE, TAXRATE, TAXAMOUNT, NETLESSTAX, GROSSCASHBREAKDOWN_NOTES50, GROSSCASHBREAKDOWN_NOTES20, GROSSCASHBREAKDOWN_NOTES10, GROSSCASHBREAKDOWN_NOTES5, GROSSCASHBREAKDOWN_COINS200, GROSSCASHBREAKDOWN_COINS100, GROSSCASHBREAKDOWN_COINS50, GROSSCASHBREAKDOWN_COINS20, GROSSCASHBREAKDOWN_COINS10, GROSSCASHBREAKDOWN_COINS5, GROSSCASHBREAKDOWN_COINS2, GROSSCASHBREAKDOWN_COINS1
+having count(*) > 1;
+
+select * from namco_machine_collections;
+
+
+select * from namco_machine_collections where collectionid = 'C0280BWIL000031291'
+union all
+select * from namco_machine_collections_history where collectionid = 'C0280BWIL000031291';
+
+copy into crown_machine_collections_history 
+from @%crown_machine_collections_history
+file_format = playsafe_data_load_file_format
+--validation_mode = return_errors
+;
+
+copy into namco_machine_collections_history 
+from @%namco_machine_collections_history
+file_format = playsafe_data_load_file_format
+--validation_mode = return_errors
+;
+
+copy into playnation_machine_collections_history 
+from @%playnation_machine_collections_history
+file_format = playsafe_data_load_file_format
+--validation_mode = return_errors
+;
+
+copy into crown_machine_inventory_list_history 
+from @%crown_machine_inventory_list_history
+file_format = playsafe_data_load_file_format
+--validation_mode = return_errors
+;
+
+copy into namco_machine_inventory_list_history 
+from @%namco_machine_inventory_list_history
+file_format = playsafe_data_load_file_format
+--validation_mode = return_errors
+;
+
+copy into playnation_machine_inventory_list_history 
+from @%playnation_machine_inventory_list_history
+file_format = playsafe_data_load_file_format
+--validation_mode = return_errors
+;
+
+ls @%crown_machine_collections_history
+;
+
+ls @%namco_machine_collections_history
+;
+
+ls @%playnation_machine_collections_history
+;
+
+ls @%crown_machine_inventory_list_history
+;
+
+ls @%namco_machine_inventory_list_history
+;
+
+ls @%playnation_machine_inventory_list_history
+;
+
+create table crown_machine_collections_pre_merge as select * from crown_machine_collections;
+create table crown_machine_inventory_list_pre_merge as select * from crown_machine_inventory_list;
+
+create table namco_machine_collections_pre_merge as select * from namco_machine_collections;
+create table namco_machine_inventory_list_pre_merge as select * from namco_machine_inventory_list;
+
+create table playnation_machine_collections_pre_merge as select * from playnation_machine_collections;
+create table playnation_machine_inventory_list_pre_merge as select * from playnation_machine_inventory_list;
+
+truncate table crown_machine_collections;
+truncate table crown_machine_inventory_list;
+
+truncate table namco_machine_collections;
+truncate table namco_machine_inventory_list;
+
+truncate table playnation_machine_collections;
+truncate table playnation_machine_inventory_list;
+
+desc table crown_machine_inventory_list;
+
+insert into crown_machine_collections select * from crown_machine_collections_history order by collectiondatetime;
+insert into crown_machine_inventory_list select * from crown_machine_inventory_list_history order by installationdate ;
+
+insert into namco_machine_collections select * from namco_machine_collections_history order by collectiondatetime;
+insert into namco_machine_inventory_list select * from namco_machine_inventory_list_history order by installationdate;
+
+insert into playnation_machine_collections select * from playnation_machine_collections_history order by collectiondatetime;
+insert into playnation_machine_inventory_list select * from playnation_machine_inventory_list_history  order by installationdate;
+
+
+use role dba;
+
+use schema haven_test.sigma_work;
+
+show views;
+
+show tables;
+
+desc table "t_mat_0c27c164c9ba4835989866e44b75a76a_0";
+
+select * from "t_mat_0c27c164c9ba4835989866e44b75a76a_0" limit 5;
+
+show tables;
