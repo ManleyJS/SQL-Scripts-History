@@ -1,0 +1,32 @@
+use role accountadmin;
+
+show shares in account;
+
+CREATE SHARE ALIGN_ALYTICS_HAVEN_STORE_UAT_SHARE;
+
+use role securityadmin;
+
+GRANT USAGE ON SCHEMA ALIGN_ALYTICS.haven_dev_dbt_rm_staging TO SHARE ALIGN_ALYTICS_HAVEN_SHARE;
+
+GRANT SELECT ON TABLE ALIGN_ALYTICS.haven_dev_dbt_rm_staging.f1_forecast_confidence TO SHARE ALIGN_ALYTICS_HAVEN_SHARE;
+--GRANT SELECT ON TABLE ALIGN_ALYTICS.haven_dev_dbt_rm_staging.f1_net_demand_forecast_staging TO SHARE ALIGN_ALYTICS_HAVEN_SHARE;
+GRANT SELECT ON TABLE ALIGN_ALYTICS.haven_dev_dbt_rm_staging.f1_net_demand_forecast_stayid_staging TO SHARE ALIGN_ALYTICS_HAVEN_SHARE;
+--GRANT SELECT ON TABLE ALIGN_ALYTICS.haven_dev_dbt_rm_staging.f1_net_demand_forecast TO SHARE ALIGN_ALYTICS_HAVEN_SHARE;
+--GRANT SELECT ON TABLE ALIGN_ALYTICS.haven_dev_dbt_rm_staging.f2_inventory_transactions TO SHARE ALIGN_ALYTICS_HAVEN_SHARE;
+GRANT SELECT ON TABLE ALIGN_ALYTICS.haven_dev_dbt_rm_staging.s1_dim_breaks_core TO SHARE ALIGN_ALYTICS_HAVEN_SHARE;
+GRANT SELECT ON TABLE ALIGN_ALYTICS.haven_dev_dbt_rm_staging.s1_dim_calendar TO SHARE ALIGN_ALYTICS_HAVEN_SHARE;
+GRANT SELECT ON TABLE ALIGN_ALYTICS.haven_dev_dbt_rm_staging.s1_dim_parks TO SHARE ALIGN_ALYTICS_HAVEN_SHARE;
+--GRANT SELECT ON TABLE ALIGN_ALYTICS.haven_dev_dbt_rm_staging.s2_breakcore_grade_group TO SHARE ALIGN_ALYTICS_HAVEN_SHARE;
+GRANT SELECT ON TABLE ALIGN_ALYTICS.haven_dev_dbt_rm_staging.s2_breakcore_grade TO SHARE ALIGN_ALYTICS_HAVEN_SHARE;
+GRANT SELECT ON TABLE ALIGN_ALYTICS.haven_dev_dbt_rm_staging.s2_breakcore_product_performance TO SHARE ALIGN_ALYTICS_HAVEN_SHARE;
+GRANT SELECT ON TABLE ALIGN_ALYTICS.haven_dev_dbt_rm_staging.s2_breakcore_summary TO SHARE ALIGN_ALYTICS_HAVEN_SHARE;
+GRANT SELECT ON TABLE ALIGN_ALYTICS.haven_dev_dbt_rm_staging.s2_staydate_grade TO SHARE ALIGN_ALYTICS_HAVEN_SHARE;
+GRANT SELECT ON TABLE ALIGN_ALYTICS.haven_dev_dbt_rm_staging.s2_staydate_summary TO SHARE ALIGN_ALYTICS_HAVEN_SHARE;
+GRANT SELECT ON TABLE ALIGN_ALYTICS.haven_dev_dbt_rm_staging.s3_staydate_product_fill TO SHARE ALIGN_ALYTICS_HAVEN_SHARE;
+GRANT SELECT ON TABLE ALIGN_ALYTICS.haven_dev_dbt_rm_staging.s3_transactiondate_grade_breakcore TO SHARE ALIGN_ALYTICS_HAVEN_SHARE;
+GRANT SELECT ON TABLE ALIGN_ALYTICS.haven_dev_dbt_rm_staging.s3_transactiondate_grade_staydate TO SHARE ALIGN_ALYTICS_HAVEN_SHARE;
+GRANT SELECT ON TABLE ALIGN_ALYTICS.haven_dev_dbt_rm_staging.s3_transactiondate_staydate TO SHARE ALIGN_ALYTICS_HAVEN_SHARE;
+--GRANT SELECT ON TABLE ALIGN_ALYTICS.haven_dev_dbt_rm_staging.s5_breakcore_product_mix_decision_engine_history_source TO SHARE ALIGN_ALYTICS_HAVEN_SHARE;
+--GRANT SELECT ON TABLE ALIGN_ALYTICS.haven_dev_dbt_rm_staging.s5_staydate_grade_final_offset_history_source TO SHARE ALIGN_ALYTICS_HAVEN_SHARE;
+
+use role dba;
