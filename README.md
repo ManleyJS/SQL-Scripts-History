@@ -25,49 +25,72 @@ The source prefix is only applied to filenames where the same script name existe
 
 ---
 
-## How to Add New Scripts Manually
+## How to Replicate This for a Different Repo
 
-Follow these steps to add new SQL files to the repo in future.
+Follow these steps to create a new GitHub repo and load files from local folders using the same process.
 
-### 1. Pre-process files before copying
+### 1. Create the GitHub repo
 
-- **Skip copies** — exclude any files with `(1)`, `(2)` etc. in the name (e.g. `my_script (1).sql`)
+```bash
+gh repo create ManleyJS/YOUR-REPO-NAME --public --description "Your description"
+```
+
+### 2. Clone it locally
+
+```bash
+cd ~/claude
+git clone https://github.com/ManleyJS/YOUR-REPO-NAME.git
+cd YOUR-REPO-NAME
+```
+
+### 3. Pre-process and copy files into the local repo
+
+Before copying, apply these rules:
+
+- **Skip copies** — exclude files with `(1)`, `(2)` etc. in the name
 - **Normalise filenames** — replace spaces and hyphens with underscores; remove any character that isn't a letter, number, underscore, or period
-- **Handle duplicates** — if the same normalised filename comes from more than one source, prefix it with the source label: `snowsight_`, `OneDrive_`, or `Workspace_`
-- **Exclude large non-script files** — e.g. full database dumps (`.sql` files over a few MB are likely dumps, not scripts)
+- **Handle cross-source duplicates** — if the same normalised filename exists in more than one source folder, prefix each copy with a source label (e.g. `snowsight_`, `OneDrive_`, `Workspace_`)
+- **Exclude large non-script files** — `.sql` files over a few MB are likely database dumps, not scripts; skip them
 
-### 2. Check for credentials before committing
+Then copy the processed files into the repo folder.
 
-Search files for patterns like:
+### 4. Check for credentials before committing
+
+Search files for these patterns and replace any actual values with `<REDACTED>`:
+
 - `aws_key_id='...'` / `aws_secret_key='...'`
 - `password='...'` / `PASSWORD='...'`
 - `azure_sas_token='...'`
 - GitHub tokens: `ghp_...`
 - AWS access key IDs: `AKIA` followed by 16 uppercase letters/numbers
 
-Replace any found values with `<REDACTED>` before committing.
+### 5. Commit and push in batches
 
-### 3. Copy files to the local repo
+GitHub will reject a single large push with a 408 timeout error if there are many files. Push in batches of ~90 files at a time:
 
 ```bash
-cp /path/to/new/scripts/*.sql /Users/manleyjs/claude/SQL-Scripts-History/
+cd ~/claude/YOUR-REPO-NAME
+
+# First batch — this also creates the main branch on GitHub
+git add file1.sql file2.sql ... file90.sql
+git commit -m "Batch 1"
+git push -u origin HEAD:main
+
+# Subsequent batches
+git add file91.sql ... file180.sql
+git commit -m "Batch 2"
+git push origin HEAD:main
+
+# Repeat until all files are pushed
 ```
 
-### 4. Commit and push
+> **Note:** Always use `git push origin HEAD:main` (not just `git push`) if your local branch has a different name to `main`.
 
-GitHub will reject a single large push (408 timeout), so push in batches of ~90 files at a time:
+### 6. Add a README
 
 ```bash
-cd /Users/manleyjs/claude/SQL-Scripts-History
-
-# Stage and commit in batches, then push each one
-git add file1.sql file2.sql ... file90.sql
-git commit -m "Add new scripts: batch 1"
-git push origin main
-
-git add file91.sql ... file180.sql
-git commit -m "Add new scripts: batch 2"
-git push origin main
-
-# repeat as needed
+# Create README.md, then:
+git add README.md
+git commit -m "Add README"
+git push origin HEAD:main
 ```
