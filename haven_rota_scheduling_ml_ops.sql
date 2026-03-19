@@ -1,0 +1,101 @@
+-- rota scheduling
+
+use ROLE sysadmin;
+
+CREATE WAREHOUSE haven_rota_scheduling_training_warehouse_GEN2_MEDIUM 
+WITH WAREHOUSE_SIZE = MEDIUM 
+WAREHOUSE_TYPE = STANDARD
+RESOURCE_CONSTRAINT = STANDARD_GEN_2
+AUTO_SUSPEND = 60 
+AUTO_RESUME = TRUE 
+MIN_CLUSTER_COUNT = 1
+MAX_CLUSTER_COUNT = 1 
+SCALING_POLICY = 'STANDARD';
+
+CREATE WAREHOUSE haven_rota_scheduling_INFERENCE_warehouse_GEN2_MEDIUM 
+WITH WAREHOUSE_SIZE = MEDIUM 
+WAREHOUSE_TYPE = STANDARD
+RESOURCE_CONSTRAINT = STANDARD_GEN_2
+AUTO_SUSPEND = 60 
+AUTO_RESUME = TRUE 
+MIN_CLUSTER_COUNT = 1
+MAX_CLUSTER_COUNT = 1 
+SCALING_POLICY = 'STANDARD';
+
+
+CREATE WAREHOUSE haven_rota_scheduling_training_warehouse_ML_MEDIUM 
+WITH WAREHOUSE_SIZE = MEDIUM 
+WAREHOUSE_TYPE = 'SNOWPARK-OPTIMIZED' 
+AUTO_SUSPEND = 60 
+AUTO_RESUME = TRUE 
+MIN_CLUSTER_COUNT = 1
+MAX_CLUSTER_COUNT = 1 
+SCALING_POLICY = 'STANDARD';
+
+CREATE WAREHOUSE haven_rota_scheduling_INFERENCE_warehouse_ML_MEDIUM 
+WITH WAREHOUSE_SIZE = MEDIUM 
+WAREHOUSE_TYPE = 'SNOWPARK-OPTIMIZED' 
+AUTO_SUSPEND = 60 
+AUTO_RESUME = TRUE 
+MIN_CLUSTER_COUNT = 1
+MAX_CLUSTER_COUNT = 1 
+SCALING_POLICY = 'STANDARD';
+
+use role useradmin;
+
+create role _haven_rota_scheduling_training_warehouse_GEN2_MEDIUM__operator;
+create role _haven_rota_scheduling_training_warehouse_GEN2_MEDIUM__usage;
+
+create role _haven_rota_scheduling_INFERENCE_warehouse_GEN2_MEDIUM__operator;
+create role _haven_rota_scheduling_INFERENCE_warehouse_GEN2_MEDIUM__usage;
+
+create role _haven_rota_scheduling_training_warehouse_ML_MEDIUM__operator;
+create role _haven_rota_scheduling_training_warehouse_ML_MEDIUM__usage;
+
+create role _haven_rota_scheduling_INFERENCE_warehouse_ML_MEDIUM__operator;
+create role _haven_rota_scheduling_INFERENCE_warehouse_ML_MEDIUM__usage;
+
+
+USE ROLE securityadmin;
+
+grant usage, monitor on warehouse haven_rota_scheduling_training_warehouse_GEN2_MEDIUM to role _haven_rota_scheduling_training_warehouse_GEN2_MEDIUM__usage;
+grant role _haven_rota_scheduling_training_warehouse_GEN2_MEDIUM__usage to role _haven_rota_scheduling_training_warehouse_GEN2_MEDIUM__operator;
+grant operate, modify on warehouse haven_rota_scheduling_training_warehouse_GEN2_MEDIUM to role _haven_rota_scheduling_training_warehouse_GEN2_MEDIUM__operator;
+
+grant usage, monitor on warehouse haven_rota_scheduling_INFERENCE_warehouse_GEN2_MEDIUM to role _haven_rota_scheduling_INFERENCE_warehouse_GEN2_MEDIUM__usage;
+grant role _haven_rota_scheduling_INFERENCE_warehouse_GEN2_MEDIUM__usage to role _haven_rota_scheduling_INFERENCE_warehouse_GEN2_MEDIUM__operator;
+grant operate, modify on warehouse haven_rota_scheduling_INFERENCE_warehouse_GEN2_MEDIUM to role _haven_rota_scheduling_INFERENCE_warehouse_GEN2_MEDIUM__operator;
+
+grant usage, monitor on warehouse haven_rota_scheduling_training_warehouse_ML_MEDIUM to role _haven_rota_scheduling_training_warehouse_ML_MEDIUM__usage;
+grant role _haven_rota_scheduling_training_warehouse_ML_MEDIUM__usage to role _haven_rota_scheduling_training_warehouse_ML_MEDIUM__operator;
+grant operate, modify on warehouse haven_rota_scheduling_training_warehouse_ML_MEDIUM to role _haven_rota_scheduling_training_warehouse_ML_MEDIUM__operator;
+
+grant usage, monitor on warehouse haven_rota_scheduling_INFERENCE_warehouse_ML_MEDIUM to role _haven_rota_scheduling_INFERENCE_warehouse_ML_MEDIUM__usage;
+grant role _haven_rota_scheduling_INFERENCE_warehouse_ML_MEDIUM__usage to role _haven_rota_scheduling_INFERENCE_warehouse_ML_MEDIUM__operator;
+grant operate, modify on warehouse haven_rota_scheduling_INFERENCE_warehouse_ML_MEDIUM to role _haven_rota_scheduling_INFERENCE_warehouse_ML_MEDIUM__operator;
+
+
+GRANT ROLE _haven_rota_scheduling_training_warehouse_GEN2_MEDIUM__usage TO ROLE haven_data_engineering;
+GRANT ROLE _haven_rota_scheduling_inference_warehouse_GEN2_MEDIUM__usage TO ROLE haven_data_engineering;
+
+GRANT ROLE _haven_rota_scheduling_training_warehouse_ML_MEDIUM__usage TO ROLE haven_data_engineering;
+GRANT ROLE _haven_rota_scheduling_inference_warehouse_ML_MEDIUM__usage TO ROLE haven_data_engineering;
+
+-- 31/07/2025
+
+use ROLE useradmin;
+
+CREATE ROLE manage_data_science_resources;
+
+use ROLE securityadmin;
+
+GRANT ROLE _haven_rota_scheduling_training_warehouse_ML_MEDIUM__operator TO ROLE manage_data_science_resources;
+GRANT ROLE _haven_rota_scheduling_INFERENCE_warehouse_ML_MEDIUM__operator TO ROLE manage_data_science_resources;
+GRANT ROLE _haven_rota_scheduling_training_warehouse_GEN2_MEDIUM__operator TO ROLE manage_data_science_resources;
+GRANT ROLE _haven_rota_scheduling_INFERENCE_warehouse_GEN2_MEDIUM__operator TO ROLE c;
+
+GRANT ROLE manage_data_science_resources TO USER sarunasjatautis;
+
+GRANT CREATE compute pool TO ROLE manage_data_science_resources;
+
+

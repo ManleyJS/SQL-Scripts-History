@@ -1,0 +1,49 @@
+USE ROLE sysadmin;
+
+-- DROP warehouse haven_transactions_management_warehouse_xsmall;
+
+CREATE WAREHOUSE haven_transactions_management_warehouse_small WITH WAREHOUSE_SIZE = SMALL WAREHOUSE_TYPE = STANDARD 
+AUTO_SUSPEND = 60 AUTO_RESUME = TRUE MIN_CLUSTER_COUNT = 1 MAX_CLUSTER_COUNT = 4 SCALING_POLICY = STANDARD;
+
+use role useradmin;
+
+-- drop role _haven_transactions_management_warehouse_xsmall__operator;
+-- rop role _haven_transactions_management_warehouse_xsmall__usage;
+
+create role _haven_transactions_management_warehouse_small__operator;
+create role _haven_transactions_management_warehouse_small__usage;
+
+CREATE ROLE haven_transactions_management;
+
+create user haven_transactions_management_sigma_service_account
+LOGIN_NAME = 'haven.transactions.management.sigma.service.account'
+default_warehouse = haven_transactions_management_warehouse_small
+default_role = haven_transactions_management
+rsa_public_key = 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAzjii/nV0hlrkSLw8Zr2S
+xZGsUUMq2Kl4vt3tYmPaXqksYWXSrV8ELL/cQ3A8liBaxC/oCTYhRh1mmLA51xfD
+SrFcNZQPvT9k9yl67OTdIcQhfrakenukO84PJFFiEaWWW8PIP25ZJ+47zfBWf8B1
+Cr7DJYO3cB8wuUVSxhXB1930CS82eCEB+FyEOWf4C8Y9SU7CPMoc2XYfZfg22skL
+jkAUkljQ+mUVggRmwE8bLE0BXfnut7CIqjNjp1hEk1Pd/IwVcNSXsuKqWsLqzFm/
+9LrBT0MRPijZbUz6fOdqpRPjUt++WX31GcZAzE2STMLYu+tjtzdRFVWhF1HKfK+V
+9wIDAQAB';
+
+
+USE ROLE securityadmin;
+
+grant usage, monitor on warehouse haven_transactions_management_warehouse_small to role _haven_transactions_management_warehouse_small__usage;
+grant role _haven_transactions_management_warehouse_small__usage to role _haven_transactions_management_warehouse_small__operator;
+grant operate, modify on warehouse haven_transactions_management_warehouse_small to role _haven_transactions_management_warehouse_small__operator;
+
+GRANT ROLE _haven_transactions_management_warehouse_small__usage TO ROLE haven_transactions_management;
+
+GRANT ROLE _haven_base__braintree__reader TO ROLE haven_transactions_management;
+GRANT ROLE _haven_base__freedompay__reader TO ROLE haven_transactions_management;
+GRANT ROLE _haven_base__payment_service__reader TO ROLE haven_transactions_management;
+
+GRANT ROLE haven_transactions_management TO USER haven_transactions_management_sigma_service_account;
+GRANT ROLE haven_transactions_management TO USER donovanransome;
+GRANT ROLE haven_transactions_management TO ROLE DBA;
+
+use ROLE haven_transactions_management;
+
+SHOW warehouses;
