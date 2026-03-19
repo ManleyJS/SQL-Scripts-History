@@ -1,0 +1,69 @@
+use ROLE sysadmin;
+
+CREATE WAREHOUSE haven_streamlit_application_warehouse_xsmall WITH WAREHOUSE_SIZE = 'xsmall' WAREHOUSE_TYPE = 'STANDARD' 
+	AUTO_SUSPEND = 60 AUTO_RESUME = TRUE MIN_CLUSTER_COUNT = 1 MAX_CLUSTER_COUNT = 1 SCALING_POLICY = 'STANDARD';
+
+USE ROLE useradmin;
+
+create role _haven_streamlit_application_warehouse_xsmall__operator;
+create role _haven_streamlit_application_warehouse_xsmall__usage;
+
+CREATE ROLE caravan_sales_pricing_application_deployment;
+
+CREATE ROLE _caravan_sales_pricing_application_deployment__haven_base__plot__reader;
+
+create OR replace user haven_streamlit_application_deployment_account
+LOGIN_NAME = 'haven.streamlit.application.deployment.account'
+default_warehouse = haven_streamlit_application_warehouse_xsmall
+default_role = caravan_sales_pricing_application_deployment
+rsa_public_key = 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEArkkRfGAT/F1rllNEdFHG
+NCXa8ffJAzutB44pe4KSHpsxaakHohgBCDNg3Q/SeTPLkMrVb6mBNH3uLIsWEB6+
+7srUXPLfVKFKWWLBb40yuIo/+ijtP4JjFl3Brl8cZjM5GSIlmmByQjCelRKoFXU9
+iDM1hfduu7fe4V4OFys9tyoGdmhiTnjFhMgiDo1uDZCOMUn/7VeAqGLJ/M9sHKXw
+Szd8FndUrkierCrhCeUXoqwQItwoNgJGk05felQ/C1ffezfbtWPsfEk2hi2ZGz5P
+n5a5tGVxarGFBzy80vhaFTOnXj5Lp1AKGnD7Fmo9ek5Ajzg80J7sB8Dipuklzdn3
+UQIDAQAB';
+
+use ROLE securityadmin;
+
+grant usage, monitor on warehouse haven_streamlit_application_warehouse_xsmall to role _haven_streamlit_application_warehouse_xsmall__usage;
+grant role _haven_streamlit_application_warehouse_xsmall__usage to role _haven_streamlit_application_warehouse_xsmall__operator;
+grant operate, modify on warehouse haven_streamlit_application_warehouse_xsmall to role _haven_streamlit_application_warehouse_xsmall__operator;
+
+GRANT ROLE _haven_streamlit_application_warehouse_xsmall__usage TO ROLE caravan_sales_pricing_application_deployment;
+
+GRANT ROLE _HAVEN_STORE__CARAVAN_SALES_PRICING_APPLICATION__creator TO ROLE caravan_sales_pricing_application_deployment;
+GRANT ROLE _haven_master__usage TO ROLE caravan_sales_pricing_application_deployment;
+GRANT ROLE _haven_master__streamlits__usage TO ROLE caravan_sales_pricing_application_deployment;
+revoke ROLE _haven_master__streamlits_dev__usage from ROLE caravan_sales_pricing_application_deployment;
+GRANT CREATE streamlit ON SCHEMA haven_master.streamlits TO ROLE caravan_sales_pricing_application_deployment;
+GRANT CREATE stage ON SCHEMA haven_master.streamlits TO ROLE caravan_sales_pricing_application_deployment;
+
+GRANT ROLE _haven_base__plot__usage TO ROLE _caravan_sales_pricing_application_deployment__haven_base__plot__reader;
+GRANT SELECT ON VIEW haven_base.plot.vans TO ROLE _caravan_sales_pricing_application_deployment__haven_base__plot__reader;
+GRANT SELECT ON VIEW haven_base.plot.van_types TO ROLE _caravan_sales_pricing_application_deployment__haven_base__plot__reader;
+--GRANT SELECT ON VIEW haven_base.plot.van_type_enum TO ROLE _caravan_sales_pricing_application_deployment__haven_base__plot__reader;
+GRANT SELECT ON VIEW haven_base.plot.van_grades TO ROLE _caravan_sales_pricing_application_deployment__haven_base__plot__reader;
+GRANT SELECT ON VIEW haven_base.plot.parks TO ROLE _caravan_sales_pricing_application_deployment__haven_base__plot__reader;
+
+GRANT ROLE _caravan_sales_pricing_application_deployment__haven_base__plot__reader TO ROLE caravan_sales_pricing_application_deployment;
+
+GRANT ROLE caravan_sales_pricing_application_deployment TO USER haven_streamlit_application_deployment_account;
+GRANT ROLE caravan_sales_pricing_application_deployment TO ROLE dba;
+
+use ROLE caravan_sales_pricing_application_deployment;
+
+show databases;
+show schemas;
+
+use SCHEMA haven_base.plot;
+
+show tables;
+show views;
+
+use ROLE dba;
+CREATE TABLE haven_store.caravan_sales_pricing_application.BASE_PRICING_2 clone haven_revenue_management.caravan_pricing.BASE_PRICING_2;
+DROP TABLE haven_store_dev.caravan_sales_pricing_application.BASE_PRICING_3 ;
+CREATE OR REPLACE TABLE haven_store.caravan_sales_pricing_application.CSPA_BASE_PRICING_3 clone haven_revenue_management.caravan_pricing.BASE_PRICING_3;
+
+

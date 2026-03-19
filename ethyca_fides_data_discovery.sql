@@ -1,0 +1,93 @@
+-- permissions completed by the notebook EthycaRoles.ipynb
+
+USE ROLE sysadmin;
+
+CREATE WAREHOUSE ethyca_fides_data_discovery_warehouse_small WITH WAREHOUSE_SIZE = 'SMALL' WAREHOUSE_TYPE = 'STANDARD' 
+	AUTO_SUSPEND = 60 AUTO_RESUME = TRUE MIN_CLUSTER_COUNT = 1 MAX_CLUSTER_COUNT = 1 SCALING_POLICY = 'STANDARD';
+
+use role useradmin;
+
+create role _ethyca_fides_data_discovery_warehouse_small__operator;
+create role _ethyca_fides_data_discovery_warehouse_small__usage;
+
+-- CREATE ROLE ethyca_fides_data_discovery;
+
+-- USER TO CREATE ethyca_fides_data_discovery
+
+DROP USER ethyca_fides_data_discovery_sigma_service_account;
+
+create user ethyca_fides_data_discovery_service_account
+LOGIN_NAME = 'ethyca.fides.data.discovery.service.account'
+default_warehouse = ethyca_fides_data_discovery_warehouse_small
+default_role = ethyca_fides_data_discovery
+rsa_public_key = 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAxxMK7ef6mav9wQoepvzl
+O1HuP0TRoWqR5bmF8IJbxR5k/QE+HrtyT/Ax6krPeU5FEoEe+HdRpt03IUgSy+6X
+zPx8ug+atfLDwAnnfdBTxafTVIKjX6TQAYJn6obs/Pr/21s0LCiMZkcOkncJhtr4
+h6gPwVeMol4dYjAgDwAfLYvcx4bf4Hfvy7PH0Sp1iovM5adkishq8hargfCRQHWF
+cJJ7ONHOXDiCFj/8lokykDGnzGiRRpm8WydRG9Mp0b0z016oMIrXq33oFHClG2QX
+NkYtwszpV58E5XaoSn9y+O3NWvuyYMjaQhfcVv6x/aUQWLXIUD/0M5Ga1XuBsY1H
+lwIDAQAB';
+
+use ROLE securityadmin;
+
+grant usage, monitor on warehouse ethyca_fides_data_discovery_warehouse_small to role _ethyca_fides_data_discovery_warehouse_small__usage;
+grant role _ethyca_fides_data_discovery_warehouse_small__usage to role _ethyca_fides_data_discovery_warehouse_small__operator;
+grant operate, modify on warehouse ethyca_fides_data_discovery_warehouse_small to role _ethyca_fides_data_discovery_warehouse_small__operator;
+
+GRANT ROLE _ethyca_fides_data_discovery_warehouse_small__usage TO ROLE ethyca_fides_data_discovery;
+GRANT ROLE ethyca_fides_data_discovery TO USER ethyca_fides_data_discovery_service_account;
+
+
+
+-- 16/12/2025
+
+use ROLE useradmin;
+
+alter user ethyca_fides_data_discovery_service_account
+SET rsa_public_key = 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA2ScrXE2aVPnVkKD+d0j7
+X1beSYOvtJYwkEQ0rDdV3gnVlmn2GL3O9/TaQrtHPPRye5fPLwrMrbUcjL7CeKzR
+SD+MlnlT0X8gfmTZstzhwF3K1d+jCyk5Iueeur4BiXeywkusjkyWt/v4N5/GyZD8
+CcDL7FyFSWMJJLnRJyibq/WMK1nl2ytKM3FnrJoepFkVEd/z5AYuiqTo690uHbHK
+wrb5Yvhcc1FY9ivVkLsRDz4z3jiRnzcwjQhB2GXBh49g/hxrnvyppGwop/1w1/4P
+gzvKLAqTGAr1OUW95KEEzshUZ8ZaRPcK+ymoMzN26GL09g7qkrd7Mx3USUsozIny
+hQIDAQAB';
+
+
+
+-- TODO
+-- Add network policy, network rule for fides server, assugn rule to user
+
+
+---- key for user
+
+EthycaFides2026
+
+-----BEGIN ENCRYPTED PRIVATE KEY-----
+MIIE6TAbBgkqhkiG9w0BBQMwDgQIx9vMMc07m3UCAggABIIEyPmTOoHAGG4+UcEl
+0hrcGsK8JLnaKnhVY8lHFqmhREEKEJloM44MlaV/LJ9uJt2hpX0sGXeymA9ou6kl
+14bstOi9VBOc4fF/E87YBX+Ijc79D2riaDhnk7DJjY306pP7C6P4q400nj2BVlRg
+kfQ80LU0+n2+g0OQJlJO1tTTawCPpMHs2EtYCzYUuaPa1PdvI7rdbwKbVP6xetBg
+H6VrHJKJ9A2yFSO1/ChXW9wGLjsY2fJUuGi1tX+LIG95oM0HGPb6qTLMU1G03XR7
+b3SENKHers6Ww83k0kzHBne1vMbJsDuEvv3hCvyml7iXkEJsYr3oz/6RrwCOsbCX
+J1xEVFXZ5lHrHUe/1KRhha57Hf0cZSE0b16Xg6f9zN+eBR5aG0YD6B7OEKIv5myr
+RASfH0KS3NB+h3rtT4pHNUmJF1LSNejmFSvQ594KOYHW2KYhsgBoV2XJlAph7Z09
+AW4yJjSobKPx04TjKzdCkW1ER10zmgk6KOfxtaJiAlIUkSgkLe9V6wrtls7wr9Cx
+YWOWZVoAQAZZalDIwsC7mkZ8EtJLEXNsOsG0hkqlUlI3iZ0g1VjWT5Ul5f9Gqdq8
+wRj04axYp9zc0doXER8cUbQQipt60Gjr5FYacz7j4grxwNuE/p6nMC9CTdzNp04j
+tdNhvJbwDLKT4aQk6EcYPiiB7+0PbvnMdBORr4mUSuk8yNpzF4g1jAEcHrpXZekW
+3R2xxUKICOQHBi0RGaV+GwR/DtJRt7w5CaA2OvWEKT8bCIlyTAIsX8J6/Q+G804V
+wW800ptDVftnSNTsp8PrMjzBET0xiMFntcZMGVY6vYGYYRwMr/OppPvLUVOKIFsK
+U5MQ2dlySMdF/5QaSYJn7qk+3rZlzmREUz9vrlLHt6wVdH1stxOBwoDyG+hbzrD0
+YKHw5Y16pWJCEpiA7jD98wnGzJls6xVoBnfTJgJlnmutHv7DlkAEJ0k5owM3mmi1
+KN/CWzmf5M4Iui2fOYdz5SVSWR8kG8iSkOBVL5WThqvQiO4G5OV8TrRkjCpwde5S
+Bm2UqUV8OXGKDMe+WlxfbHr5fQUw3UOROUTIM/y6qgtGaCpfhxSMJe6Hva9VhIRK
+DpI1N/l71IqwyuuynYyjMoXDiAAWO5iZsMiDpgxX3NHGkbfJuZFgwxDEwDXh95kN
+oowuRPBOV2T0oZcUjc7zgcZ2pVcHouUZytsX7OFlWL+ErtqMX5ZjH5d9Bf4ZMe5C
+yes1d9jXoxrQHgj5cWAKtIXQQM8v+/z/yczOSYBd2dEbtlp8OuSDbOzpQZkG7Cp6
+OiLvk5pBn1Td9VTLLa4SJVX7emcpQQCjPhAqdv2mcuOgU8TbqCjJGWofrvcWzq8M
+31C87IkU2EVIGqbrh4/E5uUi+co5uVGuCxGWO1ptbwSTmyW07BRxCW2nuC6OUjFO
+VilvKf6dwPcRjAxh2jIQ+gKizwl6H5Nyk9UemZ3zZ5gsA9Yo0jNX+JoYwQjhWgwm
+JEbUVoLT4jtup/npmTU81Do09O9cKaJ2cdLaw0Nc/lUYIjO0ndPtfm5FM28jr9dy
+Tdu2hdoolyW+J0kVd15F9YhNzGcAbOty9oYyq7dseFaTA3y+T5cUGUORAXt2x3v9
+fqzoPc3TDCCtnSpY5Q==
+-----END ENCRYPTED PRIVATE KEY-----
